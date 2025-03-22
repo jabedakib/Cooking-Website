@@ -595,6 +595,85 @@
                 grid-template-columns: 1fr;
             }
         }
+          /* Add new styles here */
+         .continent-list {
+          margin-bottom: 20px;
+        }
+        .continent-list button {
+          padding: 10px 15px;
+          margin: 5px;
+          font-size: 1em;
+          border: none;
+          background-color: #ff7e5f;
+          color: white;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: 0.3s;
+        }
+        .continent-list button:hover {
+          background-color: #e0673d;
+        }
+        select {
+          padding: 8px;
+          font-size: 1em;
+          margin-top: 10px;
+          border-radius: 5px;
+        }
+        .country-flag {
+          width: 24px;
+          height: 16px;
+          vertical-align: middle;
+          margin-right: 6px;
+        }
+        .dish-card {
+          background: #fff;
+          border-radius: 12px;
+          padding: 20px;
+          margin: 30px auto;
+          box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+          max-width: 800px;
+        }
+        .dish-card h4 {
+          color: #ff7e5f;
+          margin-bottom: 15px;
+        }
+        .dish-card img {
+          width: 100%;
+          max-width: 400px;
+          display: block;
+          margin: 10px auto;
+          border-radius: 10px;
+          box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .dish-card pre {
+          background-color: #f8f8f8;
+          padding: 12px;
+          border-radius: 8px;
+          white-space: pre-wrap;
+          font-family: inherit;
+          font-size: 1em;
+        }
+        .dark-mode {
+          background-color: #121212;
+          color: #f1f1f1;
+        }
+        .dark-mode .dish-card {
+          background-color: #1e1e1e;
+          color: #f1f1f1;
+          box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
+        }
+        .dark-mode .dish-card pre {
+          background-color: #2a2a2a;
+        }
+        .toggle-dark {
+          margin-top: 20px;
+          padding: 10px 15px;
+          background-color: #333;
+          color: #fff;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -663,6 +742,26 @@
             </div>
             <div class="recipe-grid" id="recipeGrid">
                 </div>
+<section id="globalCuisine" class="section">
+        <div class="continent-list">
+            <p>Explore dishes by continent:</p>
+            <input type="text" id="countrySearch" placeholder="Search for a country..." oninput="searchCountry(this.value)">
+            <br/>
+            <button onclick="toggleContinent('asia')">Asia</button>
+            <button onclick="toggleContinent('europe')">Europe</button>
+            <button onclick="toggleContinent('africa')">Africa</button>
+            <button onclick="toggleContinent('northAmerica')">North America</button>
+            <button onclick="toggleContinent('southAmerica')">South America</button>
+            <button onclick="toggleContinent('oceania')">Oceania</button>
+        </div>
+        <div id="continentSections"></div>
+        <hr />
+        <h2>Global Cuisine</h2>
+        <p>Select your country to explore its famous dishes and food culture:</p>
+        <div id="selectedCountryInfo" style="margin-top: 20px;"></div>
+        <button class="toggle-dark" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    </section>
+            
         </section>
         <section id="dietary" class="section">
             <h2 data-lang-key="dietaryTitle">Dietary Recipes</h2>
@@ -818,6 +917,147 @@
     </footer>
 
     <script>
+         const continentData = {
+          asia: ["India", "China", "Japan", "Thailand", "Vietnam", "Indonesia", "Bangladesh", "Pakistan", "South Korea", "Malaysia", "Nepal", "Sri Lanka", "Philippines", "Myanmar (Burma)", "Iraq", "Iran", "Saudi Arabia", "United Arab Emirates", "Israel", "Jordan", "Afghanistan", "Kazakhstan", "Uzbekistan", "Turkmenistan", "Qatar", "Oman", "Kuwait", "Yemen", "Syria", "Lebanon"],
+          europe: ["France", "Italy", "Spain", "Germany", "United Kingdom", "Portugal", "Netherlands", "Belgium", "Sweden", "Norway", "Finland", "Denmark", "Poland", "Austria", "Switzerland", "Greece", "Czech Republic", "Hungary", "Ireland", "Croatia"],
+          africa: ["Nigeria", "South Africa", "Egypt", "Morocco", "Ethiopia", "Kenya", "Ghana", "Algeria", "Tunisia", "Uganda", "Tanzania", "Zambia", "Zimbabwe", "Senegal", "Namibia"],
+          northAmerica: ["United States of America", "Canada", "Mexico", "Cuba", "Jamaica", "Haiti", "Dominican Republic", "Guatemala", "Honduras", "Panama"],
+          southAmerica: ["Brazil", "Argentina", "Colombia", "Chile", "Peru", "Ecuador", "Bolivia", "Paraguay", "Uruguay", "Venezuela"],
+          oceania: ["Australia", "New Zealand", "Fiji", "Samoa", "Papua New Guinea", "Tonga", "Vanuatu", "Solomon Islands"]
+        };
+
+        function toggleContinent(id) {
+          const sections = document.querySelectorAll('.continent-section');
+          sections.forEach(sec => sec.style.display = 'none');
+          const target = document.getElementById(id);
+          if (target) target.style.display = 'block';
+        }
+
+        function getFlagURL(country) {
+          const code = countryCodes[country];
+          return code ? `https://flagcdn.com/w40/${code}.png` : '';
+        }
+
+        const countryCodes = {
+          "India": "in"
+        };
+
+        function createContinentDropdown(continent, countries) {
+          const container = document.createElement('div');
+          container.id = continent;
+          container.className = 'continent-section';
+          container.style.display = 'none';
+
+          const label = document.createElement('label');
+          label.setAttribute('for', continent + 'Countries');
+          label.innerText = 'Choose a country:';
+
+          const select = document.createElement('select');
+          select.id = continent + 'Countries';
+          select.setAttribute('onchange', 'loadCountry(this.value)');
+
+          const defaultOption = document.createElement('option');
+          defaultOption.value = '';
+          defaultOption.text = '-- Select a country --';
+          select.appendChild(defaultOption);
+
+          countries.forEach(country => {
+            const option = document.createElement('option');
+            option.value = country;
+            option.textContent = country;
+            select.appendChild(option);
+          });
+
+          container.appendChild(label);
+          container.appendChild(select);
+          document.getElementById('continentSections').appendChild(container);
+        }
+
+        function searchCountry(query) {
+          query = query.toLowerCase();
+          let found = false;
+          for (const [continent, countries] of Object.entries(continentData)) {
+            if (!found) {
+              for (const country of countries) {
+                if (country.toLowerCase().startsWith(query)) {
+                  toggleContinent(continent);
+                  const select = document.getElementById(continent + 'Countries');
+                  if (select) {
+                    select.value = country;
+                    loadCountry(country);
+                  }
+                  found = true;
+                  break;
+                }
+              }
+            }
+          }
+        }
+
+        function createDishTemplate(countryName) {
+          if (countryName === "India") {
+            const dish = {
+              name: "Biryani",
+              recipe: `1. Soak basmati rice for 30 mins.\n2. Fry onions till golden.\n3. Cook marinated meat with spices.\n4. Layer rice and meat, sprinkle saffron milk.\n5. Cook on low heat (dum) for 20 mins.`,
+              image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Hyderabadi_Chicken_Biryani.jpg/640px-Hyderabadi_Chicken_Biryani.jpg",
+              history: "Biryani has Persian roots and was popularized in India by Mughal emperors. Over time, regional styles emerged—Hyderabadi, Lucknowi, Kolkata, and more. It's now a cultural icon across India, served during festivals, weddings, and gatherings."
+            };
+
+            return `
+              <h3>${countryName}</h3>
+              <div class="dish-card">
+                <h4>${dish.name}</h4>
+                <pre><strong>Recipe:</strong>
+${dish.recipe}</pre>
+                <img src="${dish.image}" alt="${dish.name}" />
+                <p><strong>History & Culture:</strong><br>${dish.history}</p>
+              </div>
+            `;
+          }
+
+          const placeholderDish = {
+            name: "Sample Dish",
+            recipe: "This is a sample recipe for this country's traditional dish. Replace this text with real recipe steps.",
+            image: "https://via.placeholder.com/400x250?text=Dish+Image",
+            history: "This is placeholder history. Replace with real cultural background of the dish."
+          };
+
+          let html = `<h3>${countryName}</h3><p>Explore 10 famous dishes, their history, and recipes from ${countryName}:</p>`;
+          for (let i = 0; i < 1; i++) {
+            html += `
+              <div class="dish-card">
+                <h4>${placeholderDish.name} ${i + 1}</h4>
+                <pre><strong>Recipe:</strong>
+${placeholderDish.recipe}</pre>
+                <img src="${placeholderDish.image}" alt="Dish ${i + 1}" />
+                <p><strong>History & Culture:</strong><br>${placeholderDish.history}</p>
+              </div>
+            `;
+          }
+          return html;
+        }
+
+        function loadCountry(countryName) {
+          const container = document.getElementById('selectedCountryInfo');
+          if (countryName === "") {
+            container.innerHTML = "";
+            return;
+          }
+          container.innerHTML = createDishTemplate(countryName);
+        }
+
+        function toggleDarkMode() {
+          document.body.classList.toggle('dark-mode');
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+          Object.entries(continentData).forEach(([continent, countries]) => {
+            createContinentDropdown(continent, countries);
+          });
+        });
+    </script>
+</body>
+</html>
        const translations = {
             en: {
                 heroTitle: "Discover the World on Your Plate",
