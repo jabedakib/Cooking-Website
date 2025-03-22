@@ -1,1411 +1,1171 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cuisinopedia - Global Recipes</title>
-  <meta name="description" content="Cuisinopedia - Explore global recipes, plating tips, and event planning for food lovers." />
-  <meta name="keywords" content="recipes, cooking, global cuisine, food plating, event planning" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-  <style>
-    /* Global Styles */
-    html {
-      scroll-behavior: smooth;
-    }
-    body {
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f8f8f8;
-      color: #333;
-      line-height: 1.6;
-    }
-    h1, h2, h3 {
-      font-family: 'Playfair Display', serif;
-    }
-    /* Header */
-    header {
-      position: relative;
-      overflow: hidden;
-      height: 60vh;
-      background: linear-gradient(135deg, #ff7e5f, #feb47b, #86A8E7, #7F7FD5);
-      color: white;
-      text-align: center;
-      padding: 40px 0;
-      display: flex; /* Added for vertical centering */
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-    .language-switcher {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-    }
-    .language-switcher select {
-      font-size: 14px;
-      padding: 5px;
-      border: none;
-      border-radius: 5px;
-    }
-    /* Hero Section with Image */
-    .hero {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      display: flex; /* Added */
-      flex-direction: column;
-      justify-content: center; /* Vertically center content */
-      align-items: center;
-    }
-    .hero img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.8; /* Slightly reduced opacity for better text contrast */
-      mix-blend-mode: multiply;
-      position: absolute; /* Make sure image is positioned correctly */
-      top: 0;
-      left: 0;
-      z-index: -1; /* Send image to the back */
-    }
-    .hero-text {
-      text-align: center;
-      padding: 20px;
-      background-color: rgba(0, 0, 0, 0.3); /* Added background for text */
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-      position: relative; /* Ensure text is above the image */
-      z-index: 1;
-    }
-    .hero-text h1 {
-      font-size: 3.5em; /* Increased size for impact */
-      margin-bottom: 20px;
-      letter-spacing: 2px; /* Added letter spacing */
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Added text shadow */
-    }
-    .hero-text p {
-      font-size: 1.3em; /* Increased size */
-      margin-bottom: 30px;
-      font-weight: 400; /* Make the paragraph bolder */
-      color: #eee;  /* Slightly lighter text */
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-    }
-    .cta-button {
-      background-color: #ff7e5f;
-      color: #fff;
-      padding: 15px 30px; /* Increased padding */
-      text-decoration: none;
-      border-radius: 10px; /* More rounded corners */
-      font-weight: bold;
-      transition: all 0.3s ease; /* Smooth transition */
-      font-size: 1.2em; /* Increased font size */
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4); /* Added shadow */
-    }
-    .cta-button:hover {
-      background-color: #e0673d;
-      transform: translateY(-2px); /* Slight lift on hover */
-      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4); /* Increased shadow on hover*/
-    }
-    /* Navigation */
-    nav {
-      background-color: #333;
-      position: sticky;
-      top: 0;
-      width: 100%;
-      z-index: 1000;
-      display: flex;
-      justify-content: center;
-      padding: 10px 0;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Added subtle shadow */
-    }
-    .navbar {
-      display: flex;
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      transition: all 0.3s ease;
-    }
-    .navbar li {
-      position: relative;
-    }
-    .navbar a {
-      display: block;
-      color: white;
-      text-decoration: none;
-      padding: 15px 25px; /* Increased horizontal padding */
-      font-weight: bold;
-      transition: all 0.3s ease; /* Smooth transition */
-      font-size: 1.1em;
-    }
-    .navbar a:hover {
-      background-color: #444;
-      color: #ff7e5f;
-      transform: translateY(-2px);
-    }
-    .navbar a i {
-      margin-right: 12px; /* Increased margin */
-      font-size: 1.2em;
-    }
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      background-color: #333;
-      min-width: 250px; /* Increased width of dropdown */
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* Slightly stronger shadow */
-      z-index: 1000;
-      border-radius: 5px;
-      opacity: 0;
-      transform: translateY(-10px);
-      transition: all 0.3s ease;
-    }
-    .dropdown:hover .dropdown-content {
-      display: block;
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .dropdown-content a {
-      display: block;
-      color: white;
-      padding: 12px 20px;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      font-size: 1em;
-    }
-    .dropdown-content a:hover {
-      background-color: #555;
-      color: #ff7e5f;
-      transform: translateX(5px);
-    }
-    /* Search Bar */
-    .search-bar {
-      display: flex;
-      justify-content: center;
-      padding: 25px; /* Increased padding */
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      margin-bottom: 20px;
-    }
-    .search-bar input[type="text"] {
-      width: 400px; /* Increased width */
-      padding: 12px 15px;
-      border: 2px solid #ff7e5f;
-      border-radius: 5px 0 0 5px;
-      outline: none;
-      font-size: 1.1em;
-      transition: all 0.3s ease;
-    }
-    .search-bar input[type="text"]:focus {
-      border-color: #e0673d;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      transform: scale(1.02)
-    }
-    .search-bar button {
-      padding: 12px 20px;
-      border: 2px solid #ff7e5f;
-      border-left: none;
-      background-color: #ff7e5f;
-      color: white;
-      border-radius: 0 5px 5px 0;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-size: 1.1em;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    .search-bar button:hover {
-      background-color: #e0673d;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    }
-    /* Content Sections */
-    .content {
-      padding: 40px 30px;
-      text-align: center;
-      max-width: 1200px; /* Increased max-width */
-      margin: 0 auto; /* Center the content */
-    }
-    .section {
-      display: none;
-      padding: 30px;
-      animation: fadeIn 0.5s ease-in-out;
-      border-radius: 10px;
-      background-color: rgba(255, 255, 255, 0.8); /* Added background to sections */
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
-    }
-    .active {
-      display: block;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    /* Recipe Grid & Cards */
-.recipe-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Increased min width */
-    gap: 25px; /* Increased gap */
-    margin-top: 30px;
-}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cuisinopedia - Global Recipes</title>
+    <meta name="description" content="Cuisinopedia - Explore global recipes, plating tips, and event planning for food lovers." />
+    <meta name="keywords" content="recipes, cooking, global cuisine, food plating, event planning" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        /* Global Styles */
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+            color: #333;
+            line-height: 1.6;
+        }
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Header - Using Original Gradient Colors */
+        header {
+            position: relative;
+            overflow: hidden;
+            height: 70vh;
+            background: linear-gradient(135deg, #ff7e5f, #feb47b, #86A8E7, #7F7FD5);
+            color: white;
+            text-align: center;
+            padding: 60px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .language-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .language-switcher select {
+            font-size: 16px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .language-switcher select:hover {
+            background-color: rgba(255, 255, 255, 0.95);
+            transform: scale(1.02);
+        }
+        /* Hero Section with Image */
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.7;
+            mix-blend-mode: multiply;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        .hero-text {
+            text-align: center;
+            padding: 30px;
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+            position: relative;
+            z-index: 1;
+            max-width: 80%;
+        }
+        .hero-text h1 {
+            font-size: 4em;
+            margin-bottom: 30px;
+            letter-spacing: 3px;
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.8);
+            animation: fadeIn 1s ease, pulse 2s infinite alternate;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.06); }
+        }
+        .hero-text p {
+            font-size: 1.5em;
+            margin-bottom: 40px;
+            font-weight: 400;
+            color: #eee;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+            line-height: 1.8;
+        }
+        .cta-button {
+            background-color: #ff7e5f;
+            color: #fff;
+            padding: 20px 40px;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 1.3em;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.5);
+            animation: pulseButton 2s infinite alternate;
+        }
+        @keyframes pulseButton {
+            from { transform: scale(1); }
+            to { transform: scale(1.08); }
+        }
+        .cta-button:hover {
+            background-color: #e0673d;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
+        }
+        /* Navigation */
+        nav {
+            background-color: rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            padding: 15px 0;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        .navbar {
+            display: flex;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+        .navbar li {
+            position: relative;
+        }
+        .navbar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 18px 30px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 1.2em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        .navbar a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ff7e5f;
+            transform: translateY(-4px);
+        }
+        .navbar a i {
+            margin-right: 15px;
+            font-size: 1.3em;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.8);
+            min-width: 280px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.5);
+            z-index: 1000;
+            border-radius: 10px;
+            opacity: 0;
+            transform: translateY(-15px);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .dropdown-content a {
+            display: block;
+            color: white;
+            padding: 15px 25px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .dropdown-content a:last-child {
+            border-bottom: none;
+        }
+        .dropdown-content a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #ff7e5f;
+            transform: translateX(8px);
+        }
+        /* Search Bar */
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+            max-width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+            backdrop-filter: blur(5px);
+        }
+        .search-bar input[type="text"] {
+            width: 450px;
+            padding: 15px 20px;
+            border: 2px solid #ff7e5f;
+            border-radius: 5px 0 0 5px;
+            outline: none;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+            background-color: #fff;
+        }
+        .search-bar input[type="text"]:focus {
+            border-color: #e0673d;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            transform: scale(1.04)
+        }
+        .search-bar button {
+            padding: 15px 25px;
+            border: 2px solid #ff7e5f;
+            border-left: none;
+            background-color: #ff7e5f;
+            color: white;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2em;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        .search-bar button:hover {
+            background-color: #e0673d;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 8px rgba(0, 0, 0, 0.3);
+        }
+        /* Content Sections */
+        .content {
+            padding: 60px 40px;
+            text-align: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .section {
+            display: none;
+            padding: 40px;
+            animation: fadeIn 0.5s ease-in-out;
+            border-radius: 15px;
+            background-color: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            margin-bottom: 30px;
+            backdrop-filter: blur(5px);
+        }
+        .active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        /* Recipe Grid & Cards */
+        .recipe-filter {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .recipe-filter button {
+            padding: 12px 25px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 8px;
+            background-color: #e0e0e0;
+            color: #333;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .recipe-filter button:hover {
+            background-color: #ccc;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        .recipe-filter button.active-filter {
+            background-color: #ff7e5f;
+            color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
 
-.recipe-card {
-    background: #fff;
-    border-radius: 10px; /* More rounded corners */
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1); /* Slightly stronger shadow */
-    overflow: hidden;
-    transition: all 0.3s ease; /* Smooth transition */
-    cursor: pointer;
-    display: flex; /* Added for flexbox alignment */
-    flex-direction: column;
-    height: 100%; /* Ensure cards are of equal height */
-}
-
-.recipe-card:hover {
-    transform: translateY(-5px); /* Increased lift */
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Increased shadow */
-}
-
-.recipe-card img {
-    width: 100%;
-    height: 200px; /* Increased height */
-    object-fit: cover;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-}
-
-.recipe-card h3 {
-    margin: 15px;
-    font-size: 1.3em; /* Increased font size */
-    color: #333;
-    flex: 1; /* Pushes the text content to the top */
-}
-
-.recipe-card p {
-    margin: 15px;
-    font-size: 0.95em; /* Increased font size */
-    color: #666;
-}
-
-.view-recipe {
-    display: inline-block;
-    margin: 15px;
-    padding: 10px 20px;
-    background-color: #ff7e5f;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: all 0.3s ease;
-    font-weight: bold;
-    font-size: 1.1em;
-    align-self: flex-end; /* Added to move button to bottom */
-}
-
-.view-recipe:hover {
-    background-color: #e0673d;
-    transform: translateX(5px);
-}
-
-
-    /* Feature Section */
-    #features .feature-item {
-      background-color: #fff;
-      border: 2px solid #D4AF37;
-      border-radius: 10px;
-      padding: 30px;
-      margin: 25px auto;
-      max-width: 1000px;
-      text-align: left;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    #features .feature-item:hover{
-       transform: translateY(-5px);
-       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    }
-    /* Modals */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 2000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background: rgba(0,0,0,0.7); /* Slightly darker background */
-      transition: all 0.3s ease;
-    }
-    .modal-content {
-      background-color: #fff;
-      margin: 5% auto; /* Reduced margin */
-      padding: 30px; /* Increased padding */
-      border-radius: 10px;
-      max-width: 600px; /* Increased max-width */
-      position: relative;
-      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3); /* Stronger shadow */
-      animation: fadeIn 0.3s ease;
-      transform: scale(0.9);
-    }
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: scale(0.8);
-      }
-      to {
-        opacity: 1;
-        transform: scale(0.9);
-      }
-    }
-    .close {
-      color: #aaa;
-      position: absolute;
-      top: 20px; /* Adjusted position */
-      right: 25px; /* Adjusted position */
-      font-size: 36px; /* Increased size */
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      opacity: 0.7;
-    }
-    .close:hover {
-      color: #333;
-      opacity: 1;
-      transform: scale(1.2);
-    }
-    /* Meal Planner Styles */
-    #mealPlanner {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 30px;
-      border: 2px dashed #ccc;
-      padding: 30px;
-      border-radius: 10px;
-      background: #f8f8f8;
-    }
-    .day {
-      width: 12%;
-      min-height: 200px; /* Increased height */
-      border: 1px solid #ddd;
-      padding: 15px; /* Increased padding */
-      border-radius: 10px;
-      background: #fdfdfd;
-      margin: 10px;
-      transition: all 0.3s ease;
-    }
-     .day:hover {
-        transform: scale(1.05);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-     }
-    .day h4 {
-      margin-top: 0;
-      text-align: center;
-      font-size: 1.2em;
-      color: #444;
-    }
-    .draggable {
-      padding: 10px;
-      background: #ff7e5f;
-      color: #fff;
-      margin: 10px 0;
-      border-radius: 5px;
-      cursor: grab;
-      transition: all 0.3s ease;
-      font-weight: bold;
-      text-align: center;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-    .draggable:hover {
-       transform: scale(1.1);
-       background-color: #e0673d;
-       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    }
-    /* Footer */
-    footer {
-      background-color: #333;
-      color: #fff;
-      padding: 30px;
-      text-align: center;
-      margin-top: 40px;
-      border-top: 1px solid #555;
-    }
-    .social-media a {
-      color: #fff;
-      margin: 0 15px;
-      font-size: 1.5em; /* Increased size */
-      text-decoration: none;
-      transition: all 0.3s ease;
-    }
-    .social-media a:hover {
-      color: #ff7e5f;
-      transform: scale(1.2);
-    }
-    .newsletter {
-      margin-top: 30px;
-    }
-    .newsletter h3{
-        font-size: 1.4em;
-        margin-bottom: 15px;
-    }
-    .newsletter input[type="email"] {
-      padding: 12px 15px;
-      width: 350px; /* Increased width */
-      border: none;
-      border-radius: 5px 0 0 5px;
-      font-size: 1.1em;
-      outline: none;
-      transition: all 0.3s ease;
-    }
-     .newsletter input[type="email"]:focus {
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        transform: scale(1.02);
-     }
-    .newsletter button {
-      padding: 12px 25px;
-      border: none;
-      background-color: #ff7e5f;
-      color: white;
-      border-radius: 0 5px 5px 0;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-size: 1.1em;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-    .newsletter button:hover {
-      background-color: #e0673d;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    }
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      .navbar {
-        flex-direction: column;
-      }
-      .navbar a {
-        padding: 12px 15px;
-      }
-      .search-bar input[type="text"] {
-        width: 90%;
-      }
-      .newsletter input[type="email"]{
-        width: 90%;
-      }
-      #mealPlanner {
-        flex-direction: column;
-        align-items: center;
-      }
-      .day {
-        width: 90%;
-        margin-bottom: 15px;
-      }
-      .hero-text h1{
-        font-size: 2.5em;
-      }
-      .hero-text p{
-        font-size: 1.1em;
-      }
-      .recipe-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .recipe-card {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .recipe-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        .recipe-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            transition: all 0.3s ease;
+        }
+        .recipe-card:hover img{
+             transform: scale(1.05);
+        }
+        .recipe-card h3 {
+            margin: 20px;
+            font-size: 1.4em;
+            color: #333;
+            flex: 1;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .recipe-card p {
+            margin: 20px;
+            font-size: 1.1em;
+            color: #666;
+            line-height: 1.7;
+        }
+        .view-recipe {
+            display: inline-block;
+            margin: 20px;
+            padding: 12px 25px;
+            background-color: #ff7e5f;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-size: 1.2em;
+            align-self: flex-end;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        .view-recipe:hover {
+            background-color: #e0673d;
+            transform: translateX(6px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        }
+        /* Feature Section */
+        #features .feature-item {
+            background-color: #fff;
+            border: 2px solid #D4AF37;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px auto;
+            max-width: 1100px;
+            text-align: left;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(5px);
+        }
+        #features .feature-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+        }
+        #features .feature-item h3{
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #FF7E5F;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        #features .feature-item p{
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #555;
+        }
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background: rgba(0,0,0,0.8);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 8% auto;
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 700px;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            animation: fadeIn 0.3s ease;
+            transform: scale(0.9);
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(0.9);
+            }
+        }
+        .close {
+            color: #aaa;
+            position: absolute;
+            top: 25px;
+            right: 30px;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            opacity: 0.7;
+        }
+        .close:hover {
+            color: #333;
+            opacity: 1;
+            transform: scale(1.3);
+        }
+        /* Meal Planner Styles */
+        #mealPlanner {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 40px;
+            border: 2px dashed #ccc;
+            padding: 30px;
+            border-radius: 15px;
+            background: rgba(248, 248, 248, 0.9);
+            backdrop-filter: blur(5px);
+        }
+        .day {
+            width: 12%;
+            min-height: 250px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 10px;
+            background: #fdfdfd;
+            margin: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .day:hover {
+            transform: scale(1.06);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        .day h4 {
+            margin-top: 0;
+            text-align: center;
+            font-size: 1.3em;
+            color: #444;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .draggable {
+            padding: 15px;
+            background: #ff7e5f;
+            color: #fff;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: grab;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            font-size: 1.1em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .draggable:hover {
+            transform: scale(1.1);
+            background-color: #e0673d;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        }
+        /* Footer */
+        footer {
+            background-color: #222;
+            color: #fff;
+            padding: 40px;
+            text-align: center;
+            margin-top: 60px;
+            border-top: 2px solid #444;
+        }
+        .social-media a {
+            color: #fff;
+            margin: 0 20px;
+            font-size: 1.8em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .social-media a:hover {
+            color: #ff7e5f;
+            transform: scale(1.3);
+        }
+        .newsletter {
+            margin-top: 40px;
+        }
+        .newsletter h3 {
+            font-size: 1.6em;
+            margin-bottom: 20px;
+            color: #eee;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        .newsletter input[type="email"] {
+            padding: 15px 20px;
+            width: 400px;
+            border: none;
+            border-radius: 8px 0 0 8px;
+            font-size: 1.2em;
+            outline: none;
+            transition: all 0.3s ease;
+            background-color: #fff;
+        }
+        .newsletter input[type="email"]:focus {
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            transform: scale(1.04);
+        }
+        .newsletter button {
+            padding: 15px 30px;
+            border: none;
+            background-color: #ff7e5f;
+            color: white;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2em;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        .newsletter button:hover {
+            background-color: #e0673d;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+            }
+            .navbar a {
+                padding: 12px 15px;
+            }
+            .search-bar input[type="text"] {
+                width: 90%;
+            }
+            .newsletter input[type="email"]{
+                width: 90%;
+            }
+            #mealPlanner {
+                flex-direction: column;
+                align-items: center;
+            }
+            .day {
+                width: 90%;
+                margin-bottom: 15px;
+            }
+            .hero-text h1{
+                font-size: 3em;
+            }
+            .hero-text p{
+                font-size: 1.2em;
+            }
+             .recipe-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <div class="language-switcher">
-      <select id="langSelect">
-        <option value="en">English</option>
-        <option value="es">Español</option>
-        </select>
-    </div>
-    <div class="hero">
-      <img src="global-dish.jpg" alt="Global Cuisine" />
-      <div class="hero-text">
-        <h1 data-lang-key="heroTitle">Discover the World on Your Plate</h1>
-        <p data-lang-key="heroText">Explore authentic recipes, plating tips, and event planning for every occasion.</p>
-        <a href="#home" class="cta-button">Explore Recipes</a>
-      </div>
-    </div>
-  </header>
-  <nav>
-    <ul class="navbar">
-      <li><a href="#" onclick="showSection('home')"><i class="fas fa-home"></i> Home</a></li>
-      <li class="dropdown">
-        <a href="#" class="dropbtn"><i class="fas fa-utensils"></i> Recipes</a>
-        <div class="dropdown-content">
-          <a href="#" onclick="showSection('dietary')"><i class="fas fa-leaf"></i> Dietary</a>
-          <a href="#" onclick="showSection('italian')"><i class="fas fa-pizza-slice"></i> Italian</a>
-          <a href="#" onclick="showSection('french')"><i class="fas fa-bread-slice"></i> French</a>
-          <a href="#" onclick="showSection('japanese')"><i class="fas fa-fish"></i> Japanese</a>
-          <a href="#" onclick="showSection('indian')"><i class="fas fa-pepper-hot"></i> Indian</a>
-          <a href="#" onclick="showSection('chinese')"><i class="fas fa-drumstick-bite"></i> Chinese</a>
-        </div>
-      </li>
-      <li><a href="#" onclick="showSection('occasions')"><i class="fas fa-calendar-alt"></i> Occasions</a></li>
-      <li><a href="#" onclick="showSection('plating')"><i class="fas fa-border-all"></i> Plating Tips</a></li>
-      <li><a href="#" onclick="showSection('community')"><i class="fas fa-users"></i> Community</a></li>
-      <li><a href="#" onclick="showSection('features')"><i class="fas fa-cogs"></i> Features</a></li>
-    </ul>
-  </nav>
-  <div class="search-bar">
-    <input type="text" placeholder="Search recipes..." />
-    <button><i class="fas fa-search"></i></button>
-  </div>
-  <div class="content">
-    <section id="home" class="section active">
-      <h2>Welcome to Cuisinopedia</h2>
-      <p>Explore the world of flavors with curated recipes and expert cooking tips.</p>
-      <h3>Our Goal</h3>
-      <p>
-        We share global cooking recipes tailored for everyone—from culinary professionals to home cooks on the go. Whether you need a fast, delicious meal for a busy morning, inspiration for a hearty lunch or dinner, or expert advice on pairing flavors across cuisines, we’re here to help. Discover must-try combinations, navigate new culinary traditions, plan the perfect dinner date menu, or even curate culturally-inspired wedding and event menus. Plus, our plating tips ensure your food looks as stunning as it tastes.
-      </p>
-      <div class="recipe-grid">
-        <div class="recipe-card" data-diet="nonveg" data-cuisine="italian" data-time="medium" data-difficulty="intermediate">
-          <img src="pasta.jpg" alt="Spaghetti Carbonara" />
-          <h3>Spaghetti Carbonara</h3>
-          <p>Classic Italian pasta with a creamy twist.</p>
-          <a href="#" class="view-recipe" onclick="showPairing('Spaghetti Carbonara')">Show Pairings</a>
-        </div>
-        <div class="recipe-card" data-diet="veg" data-cuisine="japanese" data-time="quick" data-difficulty="beginner">
-          <img src="sushi.jpg" alt="Sushi Platter" />
-          <h3>Sushi Platter</h3>
-          <p>AuthenticJapanese sushi with fresh ingredients.</p>
-          <a href="#" class="view-recipe" onclick="showPairing('Sushi Platter')">Show Pairings</a>
-        </div>
-      </div>
-    </section>
-    <section id="dietary" class="section">
-      <h2>Select Your Dietary Preference</h2>
-      <p>Choose from vegetarian, vegan, gluten-free, and more.</p>
-    </section>
-    <section id="italian" class="section">
-      <h2>Italian Cuisine</h2>
-<p>Discover authentic Italian recipes and food combinations to try.</p>
-<div class="recipe">
-    <div class="recipe-text">
-        <h3>Margherita Pizza</h3>
-        <p><strong>Cultural Story:</strong> Margherita Pizza is a classic Italian dish named after Queen Margherita of Savoy, featuring the colors of the Italian flag.</p>
-        <p><strong>History & Daily Consumption:</strong> It is a staple in Italian cuisine and is enjoyed worldwide.</p>
-        <button class="recipe-btn" onclick="toggleRecipe('margherita-pizza-recipe')">Recipe</button>
-    </div>
-    <div class="recipe-img">
-        <img src="images/margherita-pizza.jpg" alt="Margherita Pizza">
-    </div>
-</div>
-
-<div id="margherita-pizza-recipe" class="recipe-details">
-    <h3>Full Margherita Pizza Recipe</h3>
-    <p><strong>Serves:</strong> 2 people</p>
-    <p><strong>Ingredients:</strong></p>
-    <ul>
-        <li>2 cups flour</li>
-        <li>1 cup tomato sauce</li>
-        <li>200g mozzarella cheese</li>
-        <li>Fresh basil leaves</li>
-        <li>1 tsp olive oil</li>
-    </ul>
-    <p><strong>Instructions:</strong></p>
-    <ol>
-        <li>Prepare the pizza dough and let it rise.</li>
-        <li>Spread tomato sauce on the dough, add cheese and basil.</li>
-        <li>Bake at 220°C for 10-12 minutes.</li>
-        <li>Drizzle with olive oil and serve hot!</li>
-    </ol>
-    <button class="close-btn" onclick="toggleRecipe('margherita-pizza-recipe')">Close</button>
-</div>
-    <div class="recipe">
-    <div class="recipe-text">
-        <h3>Spaghetti Carbonara</h3>
-        <p><strong>Cultural Story:</strong> A Roman classic, Carbonara is made with eggs, cheese, pancetta, and pepper.</p>
-        <p><strong>History & Daily Consumption:</strong> It is a quick and hearty meal enjoyed by Italians and globally.</p>
-        <button class="recipe-btn" onclick="toggleRecipe('carbonara-recipe')">Recipe</button>
-    </div>
-    <div class="recipe-img">
-        <img src="images/carbonara.jpg" alt="Spaghetti Carbonara">
-    </div>
-</div>
-
-<div id="carbonara-recipe" class="recipe-details">
-    <h3>Full Spaghetti Carbonara Recipe</h3>
-    <p><strong>Serves:</strong> 4 people</p>
-    <p><strong>Ingredients:</strong></p>
-    <ul>
-        <li>400g spaghetti</li>
-        <li>150g pancetta</li>
-        <li>2 eggs</li>
-        <li>1 cup grated Parmesan</li>
-        <li>2 cloves garlic</li>
-    </ul>
-    <p><strong>Instructions:</strong></p>
-    <ol>
-        <li>Cook spaghetti al dente.</li>
-        <li>Fry pancetta and garlic until crispy.</li>
-        <li>Mix eggs and Parmesan, then toss with hot pasta.</li>
-        <li>Add pancetta and serve immediately.</li>
-    </ol>
-    <button class="close-btn" onclick="toggleRecipe('carbonara-recipe')">Close</button>
-</div>
-
-<div class="recipe">
-    <div class="recipe-text">
-        <h3>Risotto alla Milanese</h3>
-        <p><strong>Cultural Story:</strong> This saffron-infused risotto is a specialty of Milan, often served with osso buco.</p>
-        <p><strong>History & Daily Consumption:</strong> It is a luxurious dish enjoyed during special occasions.</p>
-        <button class="recipe-btn" onclick="toggleRecipe('risotto-recipe')">Recipe</button>
-    </div>
-    <div class="recipe-img">
-        <img src="images/risotto.jpg" alt="Risotto alla Milanese">
-    </div>
-</div>
-
-<div id="risotto-recipe" class="recipe-details">
-    <h3>Full Risotto alla Milanese Recipe</h3>
-    <p><strong>Serves:</strong> 4 people</p>
-    <p><strong>Ingredients:</strong></p>
-    <ul>
-        <li>1.5 cups Arborio rice</li>
-        <li>4 cups chicken stock</li>
-        <li>1 pinch saffron</li>
-        <li>1 onion (chopped)</li>
-        <li>1/2 cup white wine</li>
-    </ul>
-    <p><strong>Instructions:</strong></p>
-    <ol>
-        <li>Sauté onions in butter until translucent.</li>
-        <li>Add rice and toast for 2 minutes.</li>
-        <li>Deglaze with wine, then add stock gradually.</li>
-        <li>Stir in saffron and cook until creamy.</li>
-    </ol>
-    <button class="close-btn" onclick="toggleRecipe('risotto-recipe')">Close</button>
-</div>
-
-<div class="recipe">
-    <div class="recipe-text">
-        <h3>Tiramisu</h3>
-        <p><strong>Cultural Story:</strong> Tiramisu, meaning "pick me up," is a coffee-flavored dessert from Veneto.</p>
-        <p><strong>History & Daily Consumption:</strong> It is a popular dessert in Italian restaurants worldwide.</p>
-        <button class="recipe-btn" onclick="toggleRecipe('tiramisu-recipe')">Recipe</button>
-    </div>
-    <div class="recipe-img">
-        <img src="images/tiramisu.jpg" alt="Tiramisu">
-    </div>
-</div>
-
-<div id="tiramisu-recipe" class="recipe-details">
-    <h3>Full Tiramisu Recipe</h3>
-    <p><strong>Serves:</strong> 6 people</p>
-    <p><strong>Ingredients:</strong></p>
-    <ul>
-        <li>6 egg yolks</li>
-        <li>1 cup mascarpone cheese</li>
-        <li>1 cup strong coffee</li>
-        <li>24 ladyfingers</li>
-        <li>Cocoa powder for dusting</li>
-    </ul>
-    <p><strong>Instructions:</strong></p>
-    <ol>
-        <li>Whisk egg yolks and sugar until creamy.</li>
-        <li>Fold in mascarpone cheese.</li>
-        <li>Dip ladyfingers in coffee and layer with cream.</li>
-        <li>Chill for 4 hours, then dust with cocoa.</li>
-    </ol>
-    <button class="close-btn" onclick="toggleRecipe('tiramisu-recipe')">Close</button>
-</div>
-
-<div class="recipe">
-    <div class="recipe-text">
-        <h3>Lasagna</h3>
-        <p><strong>Cultural Story:</strong> Lasagna is a layered pasta dish from Emilia-Romagna, often served at family gatherings.</p>
-        <p><strong>History & Daily Consumption:</strong> It is a comfort food enjoyed globally.</p>
-        <button class="recipe-btn" onclick="toggleRecipe('lasagna-recipe')">Recipe</button>
-    </div>
-    <div class="recipe-img">
-        <img src="images/lasagna.jpg" alt="Lasagna">
-    </div>
-</div>
-
-<div id="lasagna-recipe" class="recipe-details">
-    <h3>Full Lasagna Recipe</h3>
-    <p><strong>Serves:</strong> 6 people</p>
-    <p><strong>Ingredients:</strong></p>
-    <ul>
-        <li>12 lasagna sheets</li>
-        <li>500g ground beef</li>
-        <li>2 cups marinara sauce</li>
-        <li>1 cup ricotta cheese</li>
-        <li>1 cup mozzarella cheese</li>
-    </ul>
-    <p><strong>Instructions:</strong></p>
-    <ol>
-        <li>Cook lasagna sheets until al dente.</li>
-        <li>Layer sheets with meat sauce, ricotta, and mozzarella.</li>
-        <li>Bake at 180°C for 30 minutes.</li>
-        <li>Let rest for 10 minutes before serving.</li>
-    </ol>
-    <button class="close-btn" onclick="toggleRecipe('lasagna-recipe')">Close</button>
-</div>
-    </section>
-    <section id="french" class="section">
-      <h2>French Cuisine</h2>
-      <p>Explore classic French dishes and innovative pairings.</p>
-      <div class="recipe">
-    <div class="recipe-text">
-        <h3>Coq au Vin</h3>
-        <p><strong>Cultural Story:</strong> A classic French dish of chicken braised with wine, mushrooms, and bacon.</p>
-        <p><strong>History & Daily Consumption:</strong> It is a hearty dish enjoyed in French households.</p>
-        <button class="recipe-btn" onclick="toggleRecipe('coq-au-vin-recipe')">Recipe</button>
-    </div>
-    <div class="recipe-img">
-        <img src="images/coq-au-vin.jpg" alt="Coq au Vin">
-    </div>
-</div>
-
-<div id="coq-au-vin-recipe" class="recipe-details">
-    <h3>Full Coq au Vin Recipe</h3>
-    <p><strong>Serves:</strong> 4 people</p>
-    <p><strong>Ingredients:</strong></p>
-    <ul>
-        <li>1 whole chicken (cut into pieces)</li>
-        <li>2 cups red wine</li>
-        <li>200g bacon</li>
-        <li>200g mushrooms</li>
-        <li>2 onions (chopped)</li>
-    </ul>
-    <p><strong>Instructions:</strong></p>
-    <ol>
-        <li>Brown chicken and bacon in a pot.</li>
-        <li>Add onions, mushrooms, and wine.</li>
-        <li>Simmer for 1.5 hours until tender.</li>
-        <li>Serve with crusty bread.</li>
-    </ol>
-    <button class="close-btn" onclick="toggleRecipe('coq-au-vin-recipe')">Close</button>
-</div>
-
-</section>
-    <section id="japanese" class="section">
-      <h2>Japanese Cuisine</h2>
-      <p>Experience the delicate flavors and artistry of Japanese cooking.</p>
-      <div class="recipe">
-    <div class="recipe-text">
-        <h3>Sushi</h3>
-        <p><strong>Cultural Story:</strong> Sushi originated in Southeast Asia and evolved into a Japanese delicacy.</p>
-        <p><strong>History & Daily Consumption:</strong> It is a staple in Japanese cuisine and enjoyed worldwide.</p>
-        <button class="recipe-btn" onclick="toggleRecipe('sushi-recipe')">Recipe</button>
-    </div>
-    <div class="recipe-img">
-        <img src="images/sushi.jpg" alt="Sushi">
-    </div>
-</div>
-
-<div id="sushi-recipe" class="recipe-details">
-    <h3>Full Sushi Recipe</h3>
-    <p><strong>Serves:</strong> 4 people</p>
-    <p><strong>Ingredients:</strong></p>
-    <ul>
-        <li>2 cups sushi rice</li>
-        <li>4 sheets nori</li>
-        <li>200g fresh fish (tuna/salmon)</li>
-        <li>1 avocado (sliced)</li>
-        <li>1 cucumber (julienned)</li>
-    </ul>
-    <p><strong>Instructions:</strong></p>
-    <ol>
-        <li>Cook sushi rice and season with vinegar.</li>
-        <li>Spread rice on nori, add fillings, and roll tightly.</li>
-        <li>Slice into pieces and serve with soy sauce.</li>
-    </ol>
-    <button class="close-btn" onclick="toggleRecipe('sushi-recipe')">Close</button>
-</div>
-
-<div class="recipe">
-    <div class="recipe-text">
-        <h3>Ramen</h3>
-        <p><strong>Cultural Story:</strong> Ramen is a Japanese noodle soup with Chinese origins, now a global favorite.</p>
-        <p><strong>History & Daily Consumption:</strong> It is a quick and comforting meal in Japan.</p>
-        <button class="recipe-btn" onclick="toggleRecipe('ramen-recipe')">Recipe</button>
-    </div>
-    <div class="recipe-img">
-        <img src="images/ramen.jpg" alt="Ramen">
-    </div>
-</div>
-
-<div id="ramen-recipe" class="recipe-details">
-    <h3>Full Ramen Recipe</h3>
-    <p><strong>Serves:</strong> 2 people</p>
-    <p><strong>Ingredients:</strong></p>
-    <ul>
-        <li>200g ramen noodles</li>
-        <li>4 cups chicken broth</li>
-        <li>2 boiled eggs</li>
-        <li>100g sliced pork</li>
-        <li>1 sheet nori</li>
-    </ul>
-    <p><strong>Instructions:</strong></p>
-    <ol>
-        <li>Cook noodles and set aside.</li>
-        <li>Simmer broth with soy sauce and mirin.</li>
-        <li>Assemble noodles, broth, pork, and eggs.</li>
-        <li>Garnish with nori and green onions.</li>
-    </ol>
-    <button class="close-btn" onclick="toggleRecipe('ramen-recipe')">Close</button>
-</div>
-
-</section>
-    <section id="indian" class="section">
-    <h2>Indian Cuisine</h2>
-    <p>Delight in traditional Indian meals and vibrant food combinations.</p>
-
-    <div class="recipe">
-        <div class="recipe-text">
-            <h3>Biryani</h3>
-            <p><strong>Cultural Story:</strong> Biryani has roots in Persia and was brought to India by the Mughal emperors. It’s a festive dish often served during weddings, festivals, and large gatherings.</p>
-            <p><strong>History & Daily Consumption:</strong> Biryani is one of the most popular dishes in India, especially in Hyderabad and Kolkata. It is consumed by millions across India daily, with different regional variations.</p>
-            <button class="recipe-btn" onclick="toggleRecipe('biryani-recipe')">Recipe</button>
-        </div>
-        <div class="recipe-img">
-            <img src="images/biryani.jpg" alt="Biryani">
-        </div>
-    </div>
-
-    <div id="biryani-recipe" class="recipe-details">
-        <h3>Full Biryani Recipe</h3>
-        <p><strong>Serves:</strong> 4 people</p>
-        <p><strong>Ingredients:</strong></p>
-        <ul>
-            <li>1 lb (500g) chicken</li>
-            <li>2 cups basmati rice</li>
-            <li>1 onion (sliced)</li>
-            <li>2 tomatoes (chopped)</li>
-            <li>½ cup yogurt</li>
-            <li>2 tbsp ghee</li>
-            <li>Spices: 1 tsp turmeric, 1 tsp garam masala, 1 tsp cumin</li>
-            <li>2 cups water</li>
-        </ul>
-        <p><strong>Instructions:</strong></p>
-        <ol>
-            <li>Marinate chicken with yogurt, spices, and salt for 2 hours.</li>
-            <li>Fry onions in ghee until golden brown.</li>
-            <li>Add chicken, cook for 10 minutes, then add tomatoes.</li>
-            <li>Add soaked rice and water, cover, and cook on low heat for 20 minutes.</li>
-            <li>Garnish with fresh cilantro and serve hot!</li>
-        </ol>
-        <button class="close-btn" onclick="toggleRecipe('biryani-recipe')">Close</button>
-    </div>
-
-    <div class="recipe">
-        <div class="recipe-text">
-            <h3>Butter Chicken (Murgh Makhani)</h3>
-            <p><strong>Cultural Story:</strong> Butter Chicken was invented in Delhi in the 1950s by the chefs at Moti Mahal restaurant. It has become one of the most beloved dishes of North Indian cuisine and a global favorite.</p>
-            <p><strong>History & Daily Consumption:</strong> Butter chicken is a staple in North Indian households and can be found in almost every Indian restaurant worldwide. It's often eaten daily or on special occasions.</p>
-            <button class="recipe-btn" onclick="toggleRecipe('butter-chicken-recipe')">Recipe</button>
-        </div>
-        <div class="recipe-img">
-            <img src="images/butter-chicken.jpg" alt="Butter Chicken">
-        </div>
-    </div>
-
-    <div id="butter-chicken-recipe" class="recipe-details">
-        <h3>Full Butter Chicken Recipe</h3>
-        <p><strong>Serves:</strong> 4 people</p>
-        <p><strong>Ingredients:</strong></p>
-        <ul>
-            <li>500g boneless chicken</li>
-            <li>2 tbsp butter</li>
-            <li>1 cup tomato puree</li>
-            <li>½ cup fresh cream</li>
-            <li>1 tsp garam masala</li>
-            <li>Salt to taste</li>
-        </ul>
-        <p><strong>Instructions:</strong></p>
-        <ol>
-            <li>Cook chicken in butter until golden brown.</li>
-            <li>Add tomato puree, spices, and cook for 10 minutes.</li>
-            <li>Stir in fresh cream, simmer for 5 minutes.</li>
-            <li>Serve hot with naan or rice!</li>
-        </ol>
-        <button class="close-btn" onclick="toggleRecipe('butter-chicken-recipe')">Close</button>
-    </div>
-  <div class="recipe">
-    <div class="recipe-text">
-        <h3>Paneer Tikka</h3>
-        <p><strong>Cultural Story:</strong> Paneer Tikka is a popular North Indian appetizer made with marinated paneer (cottage cheese) and vegetables, grilled to perfection.</p>
-        <p><strong>History & Daily Consumption:</strong> It is a staple in Indian restaurants and is often served as a starter at parties and gatherings.</p>
-        <button class="recipe-btn" onclick="toggleRecipe('paneer-tikka-recipe')">Recipe</button>
-    </div>
-    <div class="recipe-img">
-        <img src="images/paneer-tikka.jpg" alt="Paneer Tikka">
-    </div>
-</div>
-
-<div id="paneer-tikka-recipe" class="recipe-details">
-    <h3>Full Paneer Tikka Recipe</h3>
-    <p><strong>Serves:</strong> 4 people</p>
-    <p><strong>Ingredients:</strong></p>
-    <ul>
-        <li>200g paneer (cubed)</li>
-        <li>1 cup yogurt</li>
-        <li>1 tsp turmeric</li>
-        <li>1 tsp garam masala</li>
-        <li>1 tsp red chili powder</li>
-        <li>1 bell pepper (cubed)</li>
-        <li>1 onion (cubed)</li>
-    </ul>
-    <p><strong>Instructions:</strong></p>
-    <ol>
-        <li>Mix yogurt, spices, and salt in a bowl.</li>
-        <li>Add paneer and vegetables, marinate for 1 hour.</li>
-        <li>Skewer the paneer and vegetables, grill until golden brown.</li>
-        <li>Serve hot with mint chutney!</li>
-    </ol>
-    <button class="close-btn" onclick="toggleRecipe('paneer-tikka-recipe')">Close</button>
-</div>
-
-<div class="recipe">
-    <div class="recipe-text">
-        <h3>Chole Bhature</h3>
-        <p><strong>Cultural Story:</strong> Chole Bhature is a classic North Indian dish, often enjoyed as a hearty breakfast or lunch.</p>
-        <p><strong>History & Daily Consumption:</strong> It is a popular street food and is widely consumed in Punjab and Delhi.</p>
-        <button class="recipe-btn" onclick="toggleRecipe('chole-bhature-recipe')">Recipe</button>
-    </div>
-    <div class="recipe-img">
-        <img src="images/chole-bhature.jpg" alt="Chole Bhature">
-    </div>
-</div>
-
-<div id="chole-bhature-recipe" class="recipe-details">
-    <h3>Full Chole Bhature Recipe</h3>
-    <p><strong>Serves:</strong> 4 people</p>
-    <p><strong>Ingredients:</strong></p>
-    <ul>
-        <li>2 cups chickpeas (soaked overnight)</li>
-        <li>2 tomatoes (pureed)</li>
-        <li>1 onion (chopped)</li>
-        <li>1 tsp cumin seeds</li>
-        <li>1 tsp coriander powder</li>
-        <li>1 tsp turmeric</li>
-        <li>2 cups flour (for bhature)</li>
-    </ul>
-    <p><strong>Instructions:</strong></p>
-    <ol>
-        <li>Pressure cook chickpeas until soft.</li>
-        <li>Prepare the gravy with tomatoes, onions, and spices.</li>
-        <li>Mix flour, yogurt, and salt to make bhature dough.</li>
-        <li>Fry bhature until puffed and golden.</li>
-        <li>Serve hot with chole!</li>
-    </ol>
-    <button class="close-btn" onclick="toggleRecipe('chole-bhature-recipe')">Close</button>
-</div>
-</section>
-
-<script>
-    function toggleRecipe(recipeId) {
-        var recipe = document.getElementById(recipeId);
-        if (recipe.style.display === "none" || recipe.style.display === "") {
-            recipe.style.display = "block";
-        } else {
-            recipe.style.display = "none";
-        }
-    }
-</script>
-
-<style>
-    .section {
-        padding: 30px;
-    }
-
-    .recipe {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 30px;
-        background-color: #fff;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-    }
-
-    .recipe-text {
-        width: 60%;
-    }
-
-    .recipe-img {
-        width: 30%;
-    }
-
-    .recipe-img img {
-        width: 100%;
-        height: auto;
-        border-radius: 10px;
-    }
-
-    .recipe-btn {
-        padding: 12px 25px;
-        background-color: #ff5722;
-        color: white;
-        border: none;
-        cursor: pointer;
-        margin-top: 15px;
-        border-radius: 5px;
-        transition: all 0.3s ease;
-        font-size: 1.1em;
-    }
-
-    .recipe-btn:hover {
-        background-color: #f44336;
-        transform: translateY(-2px);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    .recipe-details {
-        display: none;
-        background-color: #f9f9f9;
-        padding: 25px;
-        border: 1px solid #ddd;
-        margin-top: 15px;
-        border-radius: 10px;
-    }
-
-    .close-btn {
-        padding: 10px 15px;
-        background-color: #333;
-        color: white;
-        border: none;
-        cursor: pointer;
-        border-radius: 5px;
-        transition: all 0.3s ease;
-        font-size: 1em;
-    }
-
-    .close-btn:hover {
-        background-color: #000;
-        transform: translateY(-2px);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-</style>
-
-</section>
-    <section id="chinese" class="section">
-      <h2>Chinese Cuisine</h2>
-      <p>Enjoy authentic Chinese flavors and inventive recipes.</p>
-      <div class="recipe">
-    <div class="recipe-text">
-        <h3>Kung Pao Chicken</h3>
-        <p><strong>Cultural Story:</strong> A spicy stir-fry dish from Sichuan province, known for its bold flavors.</p>
-        <p><strong>History & Daily Consumption:</strong> It is a popular dish in Chinese restaurants worldwide.</p>
-        <button class="recipe-btn" onclick="toggleRecipe('kung-pao-recipe')">Recipe</button>
-    </div>
-    <div class="recipe-img">
-        <img src="images/kung-pao.jpg" alt="Kung Pao Chicken">
-    </div>
-</div>
-
-<div id="kung-pao-recipe" class="recipe-details">
-    <h3>Full Kung Pao Chicken Recipe</h3>
-    <p><strong>Serves:</strong> 4 people</p>
-    <p><strong>Ingredients:</strong></p>
-    <ul>
-        <li>500g chicken breast</li>
-        <li>1/2 cup peanuts</li>
-        <li>2 dried chilies</li>
-        <li>2 tbsp soy sauce</li>
-        <li>1 tbsp vinegar</li>
-    </ul>
-    <p><strong>Instructions:</strong></p>
-    <ol>
-        <li>Stir-fry chicken until cooked.</li>
-        <li>Add chilies, peanuts, and sauce.</li>
-        <li>Cook until sauce thickens.</li>
-        <li>Serve with steamed rice.</li>
-    </ol>
-    <button class="close-btn" onclick="toggleRecipe('kung-pao-recipe')">Close</button>
-</div>
-
-</section>
-    <section id="occasions" class="section">
-      <h2>Occasions</h2>
-      <p>Plan your party, wedding, or special event menus with our expert tips.</p>
-    </section>
-    <section id="plating" class="section">
-      <h2>Plating Tips</h2>
-      <p>Learn how to decorate your food plate and present your dishes beautifully.</p>
-    </section>
-    <section id="community" class="section">
-      <h2>Community</h2>
-      <p>Connect with fellow food lovers, share your recipes, and join the conversation.</p>
-    </section>
-    <section id="features" class="section">
-      <h2>Interactive Features</h2>
-      <div class="feature-item">
-        <h3>Interactive Recipe Filters</h3>
-        <p>Filter recipes by dietary type and cuisine:</p>
-        <div>
-          <label><input type="checkbox" class="filter-checkbox" value="veg" /> Vegetarian</label>
-          <label><input type="checkbox" class="filter-checkbox" value="nonveg" /> Non-Vegetarian</label>
-          <label><input type="checkbox" class="filter-checkbox" value="glutenfree" /> Gluten-Free</label>
-        </div>
-        <div>
-          <select id="cuisineSelect">
-            <option value="">All Cuisines</option>
-            <option value="italian">Italian</option>
-            <option value="japanese">Japanese</option>
+    <header>
+        <div class="language-switcher">
+            <select id="langSelect">
+                <option value="en">English</option>
+                <option value="es">Español</option>
+                <option value="it">Italiano</option>
+                <option value="fr">Français</option>
+                <option value="zh">中文</option>
+                <option value="bn">বাংলা</option>
             </select>
-          <button onclick="applyFilters()">Apply Filters</button>
         </div>
-        <div class="recipe-grid" id="filterGrid">
-          <div class="recipe-card" data-diet="veg" data-cuisine="italian">
-            <img src="pasta.jpg" alt="Veg Pasta" />
-            <h3>Veg Pasta</h3>
-            <p>Delicious vegetarian pasta.</p>
-          </div>
-          <div class="recipe-card" data-diet="nonveg" data-cuisine="japanese">
-            <img src="sushi.jpg" alt="Sushi" />
-            <h3>Sushi</h3>
-            <p>Fresh Japanese sushi.</p>
-          </div>
+        <div class="hero">
+            <img src="global-dish.jpg" alt="Global Cuisine" />
+            <div class="hero-text">
+                <h1 data-lang-key="heroTitle">Discover the World on Your Plate</h1>
+                <p data-lang-key="heroText">Explore authentic recipes, plating tips, and event planning for every occasion.</p>
+                <a href="#home" class="cta-button">Explore Recipes</a>
+            </div>
         </div>
-      </div>
-      <div class="feature-item">
-        <h3>Meal Planner Tool</h3>
-        <p>Drag a recipe into a day to plan your meals.</p>
-        <div>
-          <div class="draggable" draggable="true" id="dragRecipe1">Spaghetti Carbonara</div>
-          <div class="draggable" draggable="true" id="dragRecipe2">Sushi Platter</div>
-        </div>
-        <div id="mealPlanner">
-          <div class="day" ondragover="allowDrop(event)" ondrop="drop(event)" data-day="Monday"><h4>Mon</h4></div>
-          <div class="day" ondragover="allowDrop(event)" ondrop="drop(event)" data-day="Tuesday"><h4>Tue</h4></div>
-          <div class="day" ondragover="allowDrop(event)" ondrop="drop(event)" data-day="Wed"><h4>Wed</h4></div>
-          <div class="day" ondragover="allowDrop(event)" ondrop="drop(event)" data-day="Thu"><h4>Thu</h4></div>
-          <div class="day" ondragover="allowDrop(event)" ondrop="drop(event)" data-day="Fri"><h4>Fri</h4></div>
-          <div class="day" ondragover="allowDrop(event)" ondrop="drop(event)" data-day="Sat"><h4>Sat</h4></div>
-          <div class="day" ondragover="allowDrop(event)" ondrop="drop(event)" data-day="Sun"><h4>Sun</h4></div>
-        </div>
-      </div>
-      <div class="feature-item">
-        <h3>AI-Powered Recipe Recommendations</h3>
-        <p>Enter ingredients (comma separated) and get a recommendation:</p>
-        <input type="text" id="ingredientsInput" placeholder="e.g., tomato, basil, garlic" />
-        <button onclick="getAIRecommendation()">Get Recommendation</button>
-        <p id="aiOutput"></p>
-      </div>
-      <div class="feature-item">
-        <h3>Augmented Reality (AR) Plating Guide</h3>
-        <button onclick="openModal('arModal')">Launch AR Plating Guide</button>
-      </div>
-      <div class="feature-item">
-        <h3>Voice-Activated Cooking Assistant</h3>
-        <button onclick="startVoiceAssistant()">Start Voice Assistant</button>
-        <p id="voiceOutput">Voice output will appear here...</p>
-      </div>
-      <div class="feature-item">
-        <h3>Seasonal and Trending Recipes</h3>
-        <button onclick="showSeasonal()">Show Seasonal Recipes</button>
-        <div class="recipe-grid" id="seasonalGrid" style="display:none;">
-          <div class="recipe-card" data-season="true">
-            <img src="pumpkin.jpg" alt="Pumpkin Dish" />
-            <h3>Pumpkin Soup</h3>
-            <p>Perfect for fall.</p>
-          </div>
-        </div>
-      </div>
-      <div class="feature-item">
-        <h3>Food Pairing Guide</h3>
-        <p>Click “Show Pairings” on a recipe card to see suggestions.</p>
-      </div>
-      <div class="feature-item">
-        <h3>Food Blog</h3>
-        <div id="foodBlog"></div>
-      </div>
-      <div class="feature-item">
-        <h3>Sustainability Tips</h3>
-        <button onclick="toggleSustainability()">Toggle Sustainability Tips</button>
-        <div id="sustainability" style="display:none;">
-          <p>Learn how to reduce food waste, cook with sustainable ingredients, and adopt eco-friendly kitchen practices.</p>
-        </div>
-      </div>
-      <div class="feature-item">
-        <h3>Virtual Food Tours</h3>
-        <p>Take a virtual tour of a famous food market:</p>
-        <iframe width="100%" height="300" src="https://www.google.com/maps/embed?pb=!4v1618322168907!6m8!1m7!1sCAoSLEFGMVFpcE1xTnVWRk9VZDF6OEZ6T0VRbGczSkhTUGI3a2JYWVpMN1hzV1pf!2m2!1d35.665722!2d139.770833!3f0!4f0!5f0.7820865974627469" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-      </div>
-    </section>
-  </div>
-  <footer>
-    <div class="social-media">
-      <a href="#"><i class="fab fa-instagram"></i></a>
-      <a href="#"><i class="fab fa-pinterest"></i></a>
-      <a href="#"><i class="fab fa-facebook"></i></a>
-    </div>
-    <div class="newsletter">
-      <h3>Subscribe to Our Newsletter</h3>
-      <input type="email" placeholder="Enter your email" />
-      <button>Subscribe</button>
-    </div>
-    <p>© 2025 Cuisinopedia | All Rights Reserved</p>
-  </footer>
+    </header>
+    <nav>
+        <ul class="navbar">
+            <li><a href="#home" onclick="showSection('home')"><i class="fas fa-home"></i> Home</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn"><i class="fas fa-utensils"></i> Recipes</a>
+                <div class="dropdown-content">
+                    <a href="#dietary" onclick="showSection('dietary')">Dietary</a>
+                    <a href="#cuisine" onclick="showSection('cuisine')">Cuisine</a>
+                    <a href="#seasonal" onclick="showSection('seasonal')">Seasonal</a>
+                    <a href="#plating" onclick="showSection('plating')">Plating</a>
+                </div>
+            </li>
+            <li><a href="#eventPlanning" onclick="showSection('eventPlanning')"><i class="fas fa-calendar-alt"></i> Event Planning</a></li>
+            <li><a href="#foodBlog" onclick="showSection('foodBlog')"><i class="fas fa-blog"></i> Food Blog</a></li>
+            <li><a href="#sustainability" onclick="toggleSustainability()"><i class="fas fa-leaf"></i> Sustainability</a></li>
+            <li><a href="#AIPlatingRec" onclick="showSection('AIPlatingRec')"><i class="fas fa-robot"></i> AI Plating</a></li>
+            <li><a href="#mealPlanner" onclick="showSection('mealPlanner')"><i class="fas fa-calendar-week"></i> Meal Planner</a></li>
+            <li><a href="#videoTutorials" onclick="showSection('videoTutorials')"><i class="fas fa-video"></i> Video Tutorials</a></li>
+            <li><a href="#aboutUs" onclick="showSection('aboutUs')"><i class="fas fa-users"></i> About Us</a></li>
+             <li><a href="#globalCuisine" onclick="showSection('globalCuisine')"><i class="fas fa-globe"></i> Global Cuisine</a></li>
+             <li><a href="#mealOfDay" onclick="showSection('mealOfDay')"><i class="fas fa-sun"></i> Meal of the Day</a></li>
+            <li><a href="#mealOfWeek" onclick="showSection('mealOfWeek')"><i class="fas fa-calendar-week"></i> Meal of the Week</a></li>
+            <li><a href="#mealOfMonth" onclick="showSection('mealOfMonth')"><i class="fas fa-calendar-alt"></i> Meal of the Month</a></li>
+        </ul>
+    </nav>
 
-  <div id="arModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal('arModal')">×</span>
-      <h3>AR Plating Guide</h3>
-      <p>AR Plating Guide Coming Soon!</p>
+    <div class="search-bar">
+        <input type="text" id="recipeSearch" placeholder="Search for recipes..." />
+        <button onclick="searchRecipes()">
+            <i class="fas fa-search"></i>
+        </button>
     </div>
-  </div>
-  <div id="pairingModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal('pairingModal')">×</span>
-      <h3>Food Pairing Suggestions</h3>
-      <p id="pairingContent">Pair this dish with a complementary wine or side dish.</p>
-    </div>
-  </div>
 
-  <script>
-    // Section toggler
-    function showSection(sectionId) {
-      document.querySelectorAll('.section').forEach(section => {
-        section.classList.remove('active');
-      });
-      document.getElementById(sectionId).classList.add('active');
-    }
-    // ---------------------
-    // Interactive Recipe Filters
-    function applyFilters() {
-      const checkboxes = document.querySelectorAll('.filter-checkbox');
-      const selectedDiets = Array.from(checkboxes)
-        .filter(cb => cb.checked)
-        .map(cb => cb.value);
-      const selectedCuisine = document.getElementById('cuisineSelect').value;
-      document.querySelectorAll('#filterGrid .recipe-card').forEach(card => {
-        const diet = card.getAttribute('data-diet');
-        const cuisine = card.getAttribute('data-cuisine');
-        let show = true;
-        if (selectedDiets.length && !selectedDiets.includes(diet)) {
-          show = false;
+    <div class="content">
+        <section id="home" class="section active">
+            <h2 data-lang-key="homeTitle">Featured Recipes</h2>
+            <div class="recipe-filter">
+                <button data-filter="all" class="active-filter">All</button>
+                <button data-filter="dietary">Dietary</button>
+                <button data-filter="cuisine">Cuisine</button>
+                <button data-filter="seasonal">Seasonal</button>
+                <button data-filter="plating">Plating</button>
+            </div>
+            <div class="recipe-grid" id="recipeGrid">
+                </div>
+        </section>
+        <section id="dietary" class="section">
+            <h2 data-lang-key="dietaryTitle">Dietary Recipes</h2>
+            <p data-lang-key="dietaryText">
+                Explore recipes tailored to specific dietary needs.
+            </p>
+        </section>
+        <section id="cuisine" class="section">
+            <h2 data-lang-key="cuisineTitle">Cuisine Recipes</h2>
+             <p data-lang-key="cuisineText">
+                Discover dishes from around the globe.
+            </p>
+        </section>
+        <section id="seasonal" class="section">
+            <h2 data-lang-key="seasonalTitle">Seasonal Recipes</h2>
+            <p data-lang-key="seasonalText">
+                Find recipes that highlight the best ingredients of each season.
+            </p>
+        </section>
+        <section id="plating" class="section">
+            <h2 data-lang-key="platingTitle">Plating Techniques</h2>
+            <p data-lang-key="platingText">
+                Learn how to present your culinary creations like a professional chef.
+            </p>
+        </section>
+        <section id="eventPlanning" class="section">
+            <h2 data-lang-key="eventPlanningTitle">Event Planning</h2>
+            <p data-lang-key="eventPlanningText">
+                Get tips and ideas for planning your perfect culinary event.
+            </p>
+        </section>
+        <section id="foodBlog" class="section">
+            <h2 data-lang-key="foodBlogTitle">Food Blog</h2>
+            <div id="blogPosts">
+                </div>
+        </section>
+        <section id="sustainability" class="section" style="display: none;">
+            <h2 data-lang-key="sustainabilityTitle">Sustainability Tips</h2>
+            <p data-lang-key="sustainabilityText">
+                Learn about sustainable cooking practices and how to reduce food waste.
+            </p>
+        </section>
+        <section id="AIPlatingRec" class="section">
+            <h2 data-lang-key="AIPlatingRecTitle">AI Plating Recommendations</h2>
+            <p data-lang-key="AIPlatingRecText">
+                Get AI-powered suggestions for plating your dishes.
+            </p>
+            <div id="imageUpload">
+                <input type="file" id="dishImageUpload" accept="image/*" />
+                <button onclick="getPlatingSuggestion()">Get Plating Suggestion</button>
+                <div id="platingSuggestions"></div>
+            </div>
+        </section>
+        <section id="mealPlanner" class="section">
+            <h2 data-lang-key="mealPlannerTitle">Meal Planner</h2>
+            <p data-lang-key="mealPlannerText">
+                Plan your weekly meals with our easy-to-use meal planner.
+            </p>
+            <div id="mealPlanner">
+                <div class="day">
+                    <h4>Monday</h4>
+                    <div id="monday" class="day-content" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                </div>
+                <div class="day">
+                    <h4>Tuesday</h4>
+                    <div id="tuesday" class="day-content" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                </div>
+                <div class="day">
+                    <h4>Wednesday</h4>
+                    <div id="wednesday" class="day-content" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                </div>
+                <div class="day">
+                    <h4>Thursday</h4>
+                    <div id="thursday" class="day-content" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                </div>
+                <div class="day">
+                    <h4>Friday</h4>
+                    <div id="friday" class="day-content" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                </div>
+                <div class="day">
+                    <h4>Saturday</h4>
+                    <div id="saturday" class="day-content" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                </div>
+                <div class="day">
+                    <h4>Sunday</h4>
+                    <div id="sunday" class="day-content" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                </div>
+            </div>
+            <div id="suggestedRecipes">
+                 <h4>Suggested Recipes</h4>
+                    <ul id="suggestionList">
+                    </ul>
+            </div>
+        </section>
+        <section id="videoTutorials" class="section">
+            <h2 data-lang-key="videoTutorialsTitle">Video Tutorials</h2>
+            <p data-lang-key="videoTutorialsText">
+                Watch our videotutorials to improve your cooking skills.
+            </p>
+            <div id="videoGallery">
+                </div>
+        </section>
+        <section id="aboutUs" class="section">
+            <h2 data-lang-key="aboutUsTitle">About Us</h2>
+            <p data-lang-key="aboutUsText">
+                Learn more about our team and mission.
+            </p>
+        </section>
+        <section id="globalCuisine" class="section">
+            <h2>Global Cuisine</h2>
+            <div id="countryList">
+            </div>
+        </section>
+        <section id="mealOfDay" class="section">
+            <h2>Meal of the Day</h2>
+            <p>Delicious recipe for today.</p>
+             <div id="mealOfDayRecipe">
+             </div>
+             <ul id="mealOfDayOptions">
+             </ul>
+        </section>
+        <section id="mealOfWeek" class="section">
+            <h2>Meal of the Week</h2>
+            <p> Exciting recipes for the whole week!</p>
+             <div id="mealOfWeekRecipes">
+             </div>
+             <ul id="mealOfWeekOptions">
+             </ul>
+        </section>
+        <section id="mealOfMonth" class="section">
+            <h2>Meal of the Month</h2>
+            <p>Best recipes for this month.</p>
+            <div id="mealOfMonthRecipes">
+            </div>
+            <ul id="mealOfMonthOptions">
+            </ul>
+        </section>
+    </div>
+
+    <footer>
+        <div class="social-media">
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
+        </div>
+        <div class="newsletter">
+            <h3>Subscribe to our Newsletter</h3>
+            <input type="email" placeholder="Enter your email" />
+            <button>Subscribe</button>
+        </div>
+        <p>© 2025 Cuisinopedia. All rights reserved.</p>
+    </footer>
+
+    <script>
+       const translations = {
+            en: {
+                heroTitle: "Discover the World on Your Plate",
+                heroText: "Explore authentic recipes, plating tips, and event planning for every occasion.",
+                homeTitle: "Featured Recipes",
+                dietaryTitle: "Dietary Recipes",
+                dietaryText: "Explore recipes tailored to specific dietary needs.",
+                cuisineTitle: "Cuisine Recipes",
+                cuisineText: "Discover dishes from around the globe.",
+                seasonalTitle: "Seasonal Recipes",
+                seasonalText: "Find recipes that highlight the best ingredients of each season.",
+                platingTitle: "Plating Techniques",
+                platingText: "Learn how to present your culinary creations like a professional chef.",
+                eventPlanningTitle: "Event Planning",
+                eventPlanningText: "Get tips and ideas for planning your perfect culinary event.",
+                foodBlogTitle: "Food Blog",
+                sustainabilityTitle: "Sustainability Tips",
+                sustainabilityText: "Learn about sustainable cooking practices and how to reduce food waste.",
+                AIPlatingRecTitle: "AI Plating Recommendations",
+                AIPlatingRecText: "Get AI-powered suggestions for plating your dishes.",
+                mealPlannerTitle: "Meal Planner",
+                mealPlannerText: "Plan your weekly meals with our easy-to-use meal planner.",
+                videoTutorialsTitle: "Video Tutorials",
+                videoTutorialsText: "Watch our video tutorials to improve your cooking skills.",
+                aboutUsTitle: "About Us",
+                aboutUsText: "Learn more about our team and mission.",
+                recipeModalTitle: "Recipe Details",
+                globalCuisineTitle: "Global Cuisine",
+                mealOfDayTitle: "Meal of the Day",
+                mealOfDayText: "Discover our special recipe for today!",
+                mealOfWeekTitle: "Meal of the Week",
+                mealOfWeekText: "Explore delicious recipes for the entire week.",
+                mealOfMonthTitle: "Meal of the Month",
+                mealOfMonthText: "Check out the best recipes of this month."
+            },
+            es: {
+                heroTitle: "Descubre el Mundo en tu Plato",
+                heroText: "Explora recetas auténticas, consejos de emplatado y planificación de eventos para cada ocasión.",
+                homeTitle: "Recetas Destacadas",
+                dietaryTitle: "Recetas Dietéticas",
+                dietaryText: "Explora recetas adaptadas a necesidades dietéticas específicas.",
+                cuisineTitle: "Recetas de Cocina",
+                cuisineText: "Descubre platos de todo el mundo.",
+                seasonalTitle: "Recetas de Temporada",
+                seasonalText: "Encuentra recetas que destacan los mejores ingredientes de cada estación.",
+                platingTitle: "Técnicas de Emplatado",
+                platingText: "Aprende a presentar tus creaciones culinarias como un chef profesional.",
+                eventPlanningTitle: "Planificación de Eventos",
+                eventPlanningText: "Obtén consejos e ideas para planificar tu evento culinario perfecto.",
+                foodBlogTitle: "Blog de Comida",
+                 sustainabilityTitle: "Consejos de Sostenibilidad",
+                sustainabilityText: "Aprende sobre prácticas de cocina sostenible y cómo reducir el desperdicio de alimentos.",
+                AIPlatingRecTitle: "Recomendaciones de Emplatado por IA",
+                AIPlatingRecText: "Obtén sugerencias de emplatado para tus platos impulsadas por IA.",
+                mealPlannerTitle: "Planificador de Comidas",
+                mealPlannerText: "Planifica tus comidas semanales con nuestro planificador de comidas fácil de usar.",
+                videoTutorialsTitle: "Tutoriales en Video",
+                videoTutorialsText: "Mira nuestros tutoriales en video para mejorar tus habilidades culinarias.",
+                aboutUsTitle: "Sobre Nosotros",
+                aboutUsText: "Aprende más sobre nuestro equipo y misión.",
+                recipeModalTitle: "Detalles de la Receta",
+                globalCuisineTitle: "Cocina Global",
+                mealOfDayTitle: "Comida del día",
+                mealOfDayText: "¡Descubre nuestra receta especial para hoy!",
+                mealOfWeekTitle: "Comida de la semana",
+                mealOfWeekText: "Explora deliciosas recetas para toda la semana.",
+                mealOfMonthTitle: "Comida del mes",
+                mealOfMonthText:"Echa un vistazo a las mejores recetas de este mes."
+            },
+            it: {
+                heroTitle: "Scopri il Mondo nel Tuo Piatto",
+                heroText: "Esplora ricette autentiche, consigli sull'impiattamento e pianificazione di eventi per ogni occasione.",
+                homeTitle: "Ricette in Evidenza",
+                dietaryTitle: "Ricette Dietetiche",
+                dietaryText: "Esplora le ricette su misura per esigenze dietetiche specifiche.",
+                cuisineTitle: "Ricette di Cucina",
+                cuisineText: "Scopri i piatti provenienti da tutto il mondo.",
+                seasonalTitle: "Ricette Stagionali",
+                seasonalText: "Trova ricette che mettono in risalto i migliori ingredienti di ogni stagione.",
+                platingTitle: "Tecniche di Impiattamento",
+                platingText: "Impara a presentare le tue creazioni culinarie come uno chef professionista.",
+                eventPlanningTitle: "Pianificazione di Eventi",
+                eventPlanningText: "Ottieni suggerimenti e idee per pianificare il tuo evento culinario perfetto.",
+                foodBlogTitle: "Blog di Cucina",
+                sustainabilityTitle: "Consigli sulla Sostenibilità",
+                sustainabilityText: "Scopri le pratiche di cucina sostenibile e come ridurre lo spreco alimentare.",
+                AIPlatingRecTitle: "Raccomandazioni per l'Impiattamento AI",
+                AIPlatingRecText: "Ottieni suggerimenti sull'impiattamento dei tuoi piatti forniti dall'IA.",
+                mealPlannerTitle: "Pianificatore di Pasti",
+                mealPlannerText: "Pianifica i tuoi pasti settimanali con il nostro pianificatore di pasti facile da usare.",
+                videoTutorialsTitle: "Video Tutorial",
+                videoTutorialsText: "Guarda i nostri video tutorial per migliorare le tue abilità culinarie.",
+                aboutUsTitle: "Chi Siamo",
+                aboutUsText: "Scopri di più sul nostro team e sulla nostra missione.",
+                recipeModalTitle: "Dettagli Ricetta",
+                globalCuisineTitle: "Cucina Globale",
+                mealOfDayTitle: "Pasto del giorno",
+                mealOfDayText: "Scopri la nostra ricetta speciale per oggi!",
+                mealOfWeekTitle: "Pasto della settimana",
+                mealOfWeekText: "Esplora deliziose ricette per l'intera settimana.",
+                mealOfMonthTitle: "Pasto del mese",
+                mealOfMonthText:"Dai un'occhiata alle migliori ricette di questo mese."
+            },
+            fr: {
+                heroTitle: "Découvrez le Monde dans Votre Assiette",
+                heroText: "Explorez des recettes authentiques, des conseils de dressage et la planification d'événements pour chaque occasion.",
+                homeTitle: "Recettes Vedettes",
+                dietaryTitle: "Recettes Diététiques",
+                dietaryText: "Explorez des recettes adaptées à des besoins diététiques spécifiques.",
+                cuisineTitle: "Recettes de Cuisine",
+                cuisineText: "Découvrez des plats du monde entier.",
+                seasonalTitle: "Recettes de Saison",
+                seasonalText: "Trouvez des recettes qui mettent en valeur les meilleurs ingrédients de chaque saison.",
+                platingTitle: "Techniques de Dressage",
+                platingText: "Apprenez à présenter vos créations culinaires comme un chef professionnel.",
+                eventPlanningTitle: "Planification d'Événements",
+                eventPlanningText: "Obtenez des conseils et des idées pour planifier votre événement culinaire parfait.",
+                foodBlogTitle: "Blog Culinaire",
+                sustainabilityTitle: "Conseils de Durabilité",
+                sustainabilityText: "Découvrez les pratiques de cuisine durable et comment réduire le gaspillage alimentaire.",
+                AIPlatingRecTitle: "Recommandations de Dressage IA",
+                AIPlatingRecText: "Obtenez des suggestions de dressage de vos plats alimentées par l'IA.",
+                mealPlannerTitle: "Planificateur de Repas",
+                mealPlannerText: "Planifiez vos repas hebdomadaires avec notre planificateur de repas facile à utiliser.",
+                videoTutorialsTitle: "Tutoriels Vidéo",
+                videoTutorialsText: "Regardez nos tutoriels vidéo pour améliorer vos compétences culinaires.",
+                aboutUsTitle: "À Propos de Nous",
+                aboutUsText: "Apprenez-en davantage sur notre équipe et notre mission.",
+                recipeModalTitle: "Détails de la Recette",
+                globalCuisineTitle: "Cuisine Mondiale",
+                mealOfDayTitle: "Repas du jour",
+                mealOfDayText: "Découvrez notre recette spéciale pour aujourd'hui!",
+                mealOfWeekTitle: "Repas de la semaine",
+                mealOfWeekText: "Explorez de délicieuses recettes pour toute la semaine.",
+                mealOfMonthTitle: "Repas du mois",
+                mealOfMonthText:"Découvrez les meilleures recettes de ce mois-ci."
+            },
+            zh: {
+                heroTitle: "探索世界美食",
+                heroText: "探索正宗的食谱、摆盘技巧和适合各种场合的活动策划。",
+                homeTitle: "特色食谱",
+                dietaryTitle: "饮食食谱",
+                dietaryText: "探索适合特定饮食需求的食谱。",
+                cuisineTitle: "美食食谱",
+                cuisineText: "发现来自世界各地的美食。",
+                seasonalTitle: "时令食谱",
+                seasonalText: "查找突出每个季节最佳食材的食谱。",
+                platingTitle: "摆盘技巧",
+                platingText: "学习如何像专业厨师一样展示您的烹饪作品。",
+                eventPlanningTitle: "活动策划",
+                eventPlanningText: "获取策划完美烹饪活动的提示和想法。",
+                foodBlogTitle: "美食博客",
+                sustainabilityTitle: "可持续性提示",
+                sustainabilityText: "了解可持续的烹饪 практики и как намалить пищевые отходы.",
+                AIPlatingRecTitle: "AI摆盘建议",
+                AIPlatingRecText: "获取AI驱动的菜肴摆盘建议。",
+                mealPlannerTitle: "膳食计划",
+                mealPlannerText: "使用我们易于使用的膳食计划器计划您的每周膳食。",
+                videoTutorialsTitle: "视频教程",
+                videoTutorialsText: "观看我们的视频教程，提高您的烹饪技能。",
+                aboutUsTitle: "关于我们",
+                aboutUsText: "了解有关我们团队和使命的更多信息。",
+                recipeModalTitle: "食谱详情",
+                globalCuisineTitle: "世界美食",
+                 mealOfDayTitle: "每日佳肴",
+                mealOfDayText: "发现我们今天的特色食谱！",
+                mealOfWeekTitle: "每周佳肴",
+                mealOfWeekText: "探索整周的美味食谱。",
+                mealOfMonthTitle: "每月佳肴",
+                mealOfMonthText:"查看本月的最佳食谱。"
+            },
+            bn: {
+                heroTitle: "আপনার থালায় বিশ্বকে আবিষ্কার করুন",
+                heroText: "প্রতি অনুষ্ঠানের জন্য খাঁটি রেসিপি, প্লেটিং টিপস এবং ইভেন্ট পরিকল্পনা অন্বেষণ করুন।",
+                homeTitle: "বৈশিষ্ট্যযুক্ত রেসিপি",
+                dietaryTitle: "খাদ্যতালিকা রেসিপি",
+                dietaryText: "নির্দিষ্ট খাদ্যতালিকা প্রয়োজন অনুযায়ী তৈরি রেসিপি অন্বেষণ করুন.",
+                cuisineTitle: "কুইজিন রেসিপি",
+                cuisineText: "সারা বিশ্ব থেকে খাবার আবিষ্কার করুন.",
+                seasonalTitle: "মৌসুমী রেসিপি",
+                seasonalText: "প্রতিটি ঋতুর সেরা উপাদান তুলে ধরে এমন রেসিপি খুঁজুন.",
+                platingTitle: "প্লেটিং কৌশল",
+                platingText: "একজন পেশাদার শেফের মতো আপনার রন্ধনপ্রণালী তৈরি উপস্থাপন করতে শিখুন.",
+                eventPlanningTitle: "ইভেন্ট পরিকল্পনা",
+                eventPlanningText: "আপনার নিখুঁত রন্ধনসম্পর্কিত ইভেন্ট পরিকল্পনা করার জন্য টিপস এবং ধারণা পান.",
+                foodBlogTitle: "ফুড ব্লগ",
+                sustainabilityTitle: "টেকসইতার টিপস",
+                sustainabilityText: "টেকসই রান্নার অনুশীলন এবং কীভাবে খাদ্য অপচয় কমানো যায় সে সম্পর্কে জানুন.",
+                AIPlatingRecTitle: "এআই প্লেটিং সুপারিশ",
+                AIPlatingRecText: "আপনার খাবার প্লেটিংয়ের জন্য এআই-চালিত পরামর্শ পান.",
+                mealPlannerTitle: "খাবার পরিকল্পনাকারী",
+                mealPlannerText: "আমাদের সহজে ব্যবহারযোগ্য খাবার পরিকল্পনাকারী দিয়ে আপনার সাপ্তাহিক খাবার পরিকল্পনা করুন.",
+                videoTutorialsTitle: "ভিডিও টিউটোরিয়াল",
+                videoTutorialsText: "আপনার রান্নার দক্ষতা উন্নত করতে আমাদের ভিডিও টিউটোরিয়াল দেখুন.",
+                aboutUsTitle: "আমাদের সম্পর্কে",
+                aboutUsText: "আমাদের দল এবং লক্ষ্য সম্পর্কে আরও জানুন.",
+                recipeModalTitle: "রেসিপির বিবরণ",
+                globalCuisineTitle: "বিশ্বের খাবার",
+                mealOfDayTitle: "দিনের খাবার",
+                mealOfDayText: "আজকের জন্য আমাদের বিশেষ রেসিপি আবিষ্কার করুন!",
+                mealOfWeekTitle: "সপ্তাহের খাবার",
+                mealOfWeekText: "সারা সপ্তাহের জন্য মুখরোচক রেসিপি অন্বেষণ করুন.",
+                mealOfMonthTitle: "মাসের খাবার",
+                mealOfMonthText: "এই মাসের সেরা রেসিপিগুলি দেখুন।"
+            }
+        };
+
+        let currentLanguage = 'en';
+        const langSelect = document.getElementById('langSelect');
+
+        function updateContent(language) {
+            currentLanguage = language;
+            document.querySelectorAll('[data-lang-key]').forEach(element => {
+                const key = element.getAttribute('data-lang-key');
+                if (translations[language] && translations[language][key]) {
+                    element.innerText = translations[language][key];
+                }
+            });
+            if (language === 'zh') {
+                document.body.classList.add('zh-font');
+            } else {
+                document.body.classList.remove('zh-font');
+            }
+            localStorage.setItem('preferredLanguage', language);
         }
-        if (selectedCuisine && cuisine !== selectedCuisine) {
-          show = false;
+
+        langSelect.addEventListener('change', function() {
+            updateContent(this.value);
+        });
+
+        const storedLanguage = localStorage.getItem('preferredLanguage');
+        if (storedLanguage) {
+            langSelect.value = storedLanguage;
+            updateContent(storedLanguage);
+        } else {
+            updateContent(currentLanguage);
         }
-        card.style.display = show ? 'block' : 'none';
-      });
-    }
-    // ---------------------
-    // Meal Planner Drag and Drop
-    document.querySelectorAll('.draggable').forEach(item => {
-      item.addEventListener('dragstart', function (e) {
-        e.dataTransfer.setData('text/plain', e.target.id);
-      });
-    });
-    function allowDrop(ev) {
-      ev.preventDefault();
-    }
-    function drop(ev) {
-      ev.preventDefault();
-      const data = ev.dataTransfer.getData('text/plain');
-      const draggedEl = document.getElementById(data);
-      // Append a clone to avoid removing from original list
-      ev.target.closest('.day').appendChild(draggedEl.cloneNode(true));
-    }
-    // ---------------------
-    // AI-Powered Recipe Recommendations
-    function getAIRecommendation() {
-      const input = document.getElementById('ingredientsInput').value;
-      const recipes = [
-        'Tomato Basil Pasta',
-        'Garlic Shrimp',
-        'Vegan Salad Bowl',
-        'Spicy Curry'
-      ];
-      // Simple simulation: choose a random recipe
-      const rec = recipes[Math.floor(Math.random() * recipes.length)];
-      document.getElementById('aiOutput').innerText = `Based on [${input}], try: ${rec}`;
-    }
-    // ---------------------
-    // Modal controls
-    function openModal(modalId) {
-      document.getElementById(modalId).style.display = 'block';
-    }
-    function closeModal(modalId) {
-      document.getElementById(modalId).style.display = 'none';
-    }
-    // ---------------------
-    // Voice-Activated Cooking Assistant
-    function startVoiceAssistant() {
-      const output = document.getElementById('voiceOutput');
-      if (!('webkitSpeechRecognition' in window)) {
-        output.innerText = "Voice recognition not supported in this browser.";
-        return;
-      }
-      const recognition = new webkitSpeechRecognition();
-      recognition.lang = 'en-US';
-      recognition.start();
-      recognition.onresult = function(event) {
-        output.innerText = 'You said: ' + event.results[0][0].transcript;
-      };
-      recognition.onerror = function(event) {
-        output.innerText = 'Error occurred in recognition: ' + event.error;
-      };
-    }
-    // ---------------------
-    // Seasonal and Trending Recipes Toggle
-    function showSeasonal() {
-      const seasonalGrid = document.getElementById('seasonalGrid');
-      seasonalGrid.style.display = seasonalGrid.style.display === 'none' ? 'grid' : 'none';
-    }
-    // ---------------------
-    // Food Pairing Guide: Show modal with pairing suggestions
-    function showPairing(recipeName) {
-      document.getElementById('pairingContent').innerText =
-        `For ${recipeName}, we suggest pairing with a light white wine or a crisp salad.`;
-      openModal('pairingModal');
-    }
-    // ---------------------
-    // Food Blog: Load dummy posts
-    function loadFoodBlog() {
-      const blogPosts = [
-        { title: 'Top 10 Italian Dishes to Try', content: 'Explore the richness of Italian cuisine...' },
-        { title: 'Sustainable Cooking Tips', content: 'Learn how to reduce food waste and cook sustainably...' }
-      ];
-      const blogContainer = document.getElementById('foodBlog');
-      blogPosts.forEach(post => {
-        const postDiv = document.createElement('div');
-        postDiv.style.borderBottom = '1px solid #ddd';
-        postDiv.style.marginBottom = '10px';
-        postDiv.innerHTML = `<h4>${post.title}</h4><p>${post.content}</p>`;
-        blogContainer.appendChild(postDiv);
-      });
-    }
-    // ---------------------
-    // Sustainability Tips Toggle
-    function toggleSustainability() {
-      const sust = document.getElementById('sustainability');
-      sust.style.display = sust.style.display === 'none' ? 'block' : 'none';
-    }
-    // ---------------------
-    // Multilingual Support: Simple demo changing header text
-    document.getElementById('langSelect').addEventListener('change', function() {
-      const lang = this.value;
-      const translations = {
-        en: {
-          heroTitle: "Discover the World on Your Plate",
-          heroText: "Explore authentic recipes, plating tips, and event planning for every occasion."
-        },
-        es: {
-          heroTitle: "Descubre el Mundo en tu Plato",
-          heroText: "Explora recetas auténticas, consejos de emplatado y planificación de eventos para cada ocasión."
+
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById(sectionId).style.display = 'block';
+             if (sectionId === "home") {
+                loadRecipes();
+            } else if (sectionId === "foodBlog"){
+                loadFoodBlog();
+            } else if (sectionId === "videoTutorials"){
+                loadVideoTutorials();
+            } else if (sectionId === "globalCuisine"){
+                loadGlobalCuisine();
+            } else if (sectionId === "mealOfDay"){
+                loadMealOfDayRecipe();
+            } else if (sectionId === "mealOfWeek"){
+                loadMealOfWeekRecipes();
+            } else if (sectionId === "mealOfMonth"){
+                loadMealOfMonthRecipes();
+            }
         }
-      };
-      document.querySelector('[data-lang-key="heroTitle"]').innerText = translations[lang].heroTitle;
-      document.querySelector('[data-lang-key="heroText"]').innerText = translations[lang].heroText;
-    });
-    // ---------------------
-    // On page load, load food blog posts
-    window.onload = function() {
-      loadFoodBlog();
-    };
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places"></script>
+
+        function loadRecipes() {
+            const recipes = [
+                {
+                    title: "Classic Italian Pasta",
+                    imageUrl: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                    dietary: "Vegetarian",
+                    cuisine: "Italian",
+                    seasonal: "All Seasons",
+                    plating: "Classic",
+                    description: "A timeless dish with fresh tomatoes, basil, and Parmesan.",
+                    ingredients: ["Pasta", "Tomatoes", "Basil", "Garlic", "Olive Oil", "Parmesan"],
+                    instructions: "Cook pasta. Sauté garlic, add tomatoes, basil. Combine with pasta. Serve with Parmesan."
+                },
+                {
+                    title: "Spicy Thai Curry",
+                    imageUrl: "https://plus.unsplash.com/premium_photo-1666349344589-f918f4b89099?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dGhhaSUyMGN1cnJ5fGVufDB8fDB8fHww",
+                    dietary: "Vegan",
+                    cuisine: "Thai",
+                    seasonal: "Spring",
+                    plating: "Modern",
+                    description: "Aromatic curry with coconut milk, vegetables, and Thai spices.",
+                    ingredients: ["Coconut Milk", "Vegetables", "Curry Paste", "Rice", "Tofu", "Spices"],
+                    instructions: "Cook rice. Sauté tofu, add vegetables, curry paste, and coconut milk. Serve with rice."
+                },
+                {
+                    title: "Fresh Spring Salad",
+                    imageUrl: "https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                    dietary: "Vegan",
+                    cuisine: " fusion",
+                    seasonal: "Spring",
+                    plating: "Natural",
+                    description: "A vibrant salad with spring greens, berries, and a citrus vinaigrette.",
+                    ingredients: ["Spring Greens", "Berries", "Citrus Vinaigrette", "Nuts", "Seeds"],
+                    instructions: "Mix greens, berries, nuts, and seeds. Dress with vinaigrette."
+                },
+                {
+                    title: "Rich Chocolate Cake",
+                    imageUrl: "https://images.unsplash.com/photo-1495147466023-ac5c588e2e94?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                    dietary: "Vegetarian",
+                    cuisine: "American",
+                    seasonal: "All Seasons",
+                    plating: "Classic",
+                    description: "Decadent chocolate cake with a rich, fudgy frosting.",
+                    ingredients: ["Flour", "Cocoa Powder", "Sugar", "Eggs", "Butter", "Chocolate"],
+                    instructions: "Mix dry ingredients. Beat wet ingredients. Combine. Bake. Frost."
+                },
+                  {
+                    title: "Japanese Sushi Rolls",
+                    imageUrl: "https://images.unsplash.com/photo-1579584425555-c3ce1784e1b1?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                    dietary: "pescatarian",
+                    cuisine: "Japanese",
+                    seasonal: "Summer",
+                    plating: "Minimalist",
+                    description: "Fresh, hand-rolled sushi, a delightful culinary experience.",
+                    ingredients: ["Sushi Rice", "Nori", "Fresh Fish", "Avocado", "Cucumber", "Soy Sauce", "Wasabi"],
+                    instructions: "Prepare rice, layer with nori and fillings, roll, slice, and serve."
+                },
+            ];
+
+            const recipeGrid = document.getElementById('recipeGrid');
+            recipeGrid.innerHTML = '';
+
+            recipes.forEach(recipe => {
+                const card = document.createElement('div');
+                card.classList.add('recipe-card');
+                card.setAttribute('data-recipe-id', recipe.id);
+                card.innerHTML = `
+                    <img src="${recipe.imageUrl}" alt="${recipe.title}" />
+                    <h3>${recipe.title}</h3>
+                    <p>${recipe.description}</p>
+                    <a href="#" class="view-recipe" onclick="openModal(${recipe.id})">View Recipe</a>
+                `;
+                recipeGrid.appendChild(card);
+            });
+        }
+
+
+
+        function showPairing(recipeName) {
+            alert(`Pairing suggestions for ${recipeName}: [Wine/Drink Suggestion], [Side Dish Suggestion]`);
+        }
+
+       
+        window.onload = function() {
+            loadFoodBlog();
+            loadRecipes();
+        };
+    </script>
 </body>
 </html>
