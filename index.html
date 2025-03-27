@@ -285,6 +285,121 @@
             margin-top: 50px;
         }
 
+        /* New styles for AI features */
+        .ai-prompt-form {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+        
+        .ai-prompt-form textarea {
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 15px;
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .ai-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .ai-feature-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .ai-feature-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .recipe-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .recipe-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text);
+        }
+        
+        .recipe-detail {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        .recipe-detail img {
+            width: 100%;
+            border-radius: 8px;
+            object-fit: cover;
+            height: 300px;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
         @media (max-width: 768px) {
             .hero-text h1 {
                 font-size: 2.2rem;
@@ -296,6 +411,10 @@
             }
             
             .recipe-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .recipe-detail {
                 grid-template-columns: 1fr;
             }
         }
@@ -318,6 +437,7 @@
             <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
             <li><a href="#recipes"><i class="fas fa-utensils"></i> Recipes</a></li>
             <li><a href="#ai-blog"><i class="fas fa-robot"></i> AI Blog</a></li>
+            <li><a href="#ai-recipes"><i class="fas fa-magic"></i> AI Recipes</a></li>
             <li><a href="#about"><i class="fas fa-info-circle"></i> About</a></li>
         </ul>
     </nav>
@@ -325,7 +445,7 @@
     <main class="container">
         <section id="home" class="section">
             <h2>Welcome to Cuisinopedia</h2>
-            <p>Discover AI-generated recipes and food articles from around the world.</p>
+            <p>Discover AI-generated recipes and food articles from around the world, powered by DeepSeek AI.</p>
         </section>
 
         <section id="recipes" class="section">
@@ -335,19 +455,63 @@
             </div>
         </section>
 
+        <section id="ai-recipes" class="section">
+            <h2><i class="fas fa-magic"></i> AI Recipe Generator</h2>
+            <div class="ai-prompt-form">
+                <h3>Generate Custom Recipes</h3>
+                <p>Tell our AI what kind of recipe you'd like to create:</p>
+                <textarea id="recipePrompt" placeholder="E.g., 'A vegan dessert using seasonal fruits' or 'A quick 30-minute Italian pasta dish'"></textarea>
+                <div class="ai-features">
+                    <button class="ai-feature-btn" onclick="generateRecipe('breakfast')"><i class="fas fa-egg"></i> Breakfast</button>
+                    <button class="ai-feature-btn" onclick="generateRecipe('lunch')"><i class="fas fa-hamburger"></i> Lunch</button>
+                    <button class="ai-feature-btn" onclick="generateRecipe('dinner')"><i class="fas fa-utensils"></i> Dinner</button>
+                    <button class="ai-feature-btn" onclick="generateRecipe('dessert')"><i class="fas fa-ice-cream"></i> Dessert</button>
+                    <button class="ai-feature-btn" onclick="generateRecipe('vegan')"><i class="fas fa-leaf"></i> Vegan</button>
+                </div>
+                <button onclick="generateCustomRecipe()" class="ai-generate-btn">
+                    <i class="fas fa-magic"></i> Generate Recipe
+                </button>
+            </div>
+            <div id="generatedRecipes">
+                <!-- AI-generated recipes will appear here -->
+            </div>
+        </section>
+
         <section id="ai-blog" class="section">
             <h2><i class="fas fa-robot"></i> AI Food Blog</h2>
-            <button onclick="generateBlogPost()" class="ai-generate-btn">
-                <i class="fas fa-magic"></i> Generate New Post
-            </button>
+            <div class="ai-prompt-form">
+                <h3>Custom Blog Post Generator</h3>
+                <p>Give our AI some direction for your food blog post:</p>
+                <textarea id="blogPrompt" placeholder="E.g., 'Write about the health benefits of Mediterranean diet' or 'Create a guide to pairing wine with cheese'"></textarea>
+                <div class="ai-features">
+                    <button class="ai-feature-btn" onclick="setBlogPrompt('trends')"><i class="fas fa-chart-line"></i> Food Trends</button>
+                    <button class="ai-feature-btn" onclick="setBlogPrompt('techniques')"><i class="fas fa-mortar-pestle"></i> Cooking Techniques</button>
+                    <button class="ai-feature-btn" onclick="setBlogPrompt('culture')"><i class="fas fa-globe"></i> Food Culture</button>
+                    <button class="ai-feature-btn" onclick="setBlogPrompt('health')"><i class="fas fa-heart"></i> Nutrition</button>
+                    <button class="ai-feature-btn" onclick="setBlogPrompt('restaurants')"><i class="fas fa-store"></i> Restaurant Guide</button>
+                </div>
+                <button onclick="generateBlogPost()" class="ai-generate-btn">
+                    <i class="fas fa-magic"></i> Generate Blog Post
+                </button>
+            </div>
             <div id="blogPosts">
                 <!-- AI-generated posts appear here -->
                 <div class="blog-post">
-                    <p>Click the button above to generate your first AI food blog post!</p>
+                    <p>Enter a prompt above or click one of the quick buttons to generate your first AI food blog post!</p>
                 </div>
             </div>
         </section>
     </main>
+
+    <!-- Recipe Modal -->
+    <div class="recipe-modal" id="recipeModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+            <div class="recipe-detail" id="recipeDetail">
+                <!-- Recipe details loaded here -->
+            </div>
+        </div>
+    </div>
 
     <footer>
         <p>&copy; 2023 Cuisinopedia | Powered by DeepSeek AI</p>
@@ -359,7 +523,7 @@
 
     <script>
         // ===== CONFIGURATION =====
-        const DEEPSEEK_API_KEY = "sk-05fc77a69a924bbea2bcf8a703adc85f"; // Replace with your key
+        const DEEPSEEK_API_KEY = "YOUR_DEEPSEEK_API_KEY"; // Replace with your actual API key
         
         // Sample recipe data
         const recipes = [
@@ -370,10 +534,28 @@
                 description: "Classic Italian pasta with eggs, cheese, and pancetta.",
                 prepTime: "15 mins",
                 cookTime: "15 mins",
+                servings: 4,
+                difficulty: "Medium",
                 rating: 4.8,
                 tags: ["Italian", "Pasta", "Dinner"],
-                ingredients: ["Spaghetti", "Eggs", "Pancetta", "Parmesan", "Black Pepper"],
-                instructions: ["Cook pasta", "Fry pancetta", "Mix eggs and cheese", "Combine all"]
+                ingredients: [
+                    "400g spaghetti",
+                    "200g pancetta or guanciale, diced",
+                    "4 large eggs",
+                    "50g pecorino cheese, grated",
+                    "50g parmesan, grated",
+                    "Freshly ground black pepper",
+                    "Salt to taste"
+                ],
+                instructions: [
+                    "Bring a large pot of salted water to boil and cook spaghetti according to package instructions.",
+                    "While pasta cooks, fry pancetta in a large pan until crispy.",
+                    "In a bowl, whisk eggs and mix in grated cheeses and plenty of black pepper.",
+                    "Drain pasta, reserving a cup of pasta water, then immediately add to the pan with pancetta.",
+                    "Remove pan from heat and quickly stir in the egg mixture, adding pasta water as needed to create a creamy sauce.",
+                    "Serve immediately with extra grated cheese and black pepper."
+                ],
+                notes: "The key is to work quickly so the heat from the pasta cooks the eggs without scrambling them."
             },
             {
                 id: 2,
@@ -382,10 +564,32 @@
                 description: "Creamy Indian curry with grilled chicken pieces.",
                 prepTime: "20 mins",
                 cookTime: "30 mins",
+                servings: 4,
+                difficulty: "Medium",
                 rating: 4.7,
                 tags: ["Indian", "Curry", "Spicy"],
-                ingredients: ["Chicken", "Yogurt", "Tomatoes", "Cream", "Spices"],
-                instructions: ["Marinate chicken", "Grill chicken", "Make sauce", "Combine and simmer"]
+                ingredients: [
+                    "500g chicken breast, cut into chunks",
+                    "150g yogurt",
+                    "2 tbsp tikka masala paste",
+                    "1 onion, finely chopped",
+                    "3 garlic cloves, minced",
+                    "1 tbsp ginger, grated",
+                    "400g canned tomatoes",
+                    "100ml cream",
+                    "1 tbsp garam masala",
+                    "Fresh coriander for garnish"
+                ],
+                instructions: [
+                    "Marinate chicken in yogurt and 1 tbsp tikka paste for at least 1 hour (overnight for best results).",
+                    "Grill or pan-fry chicken until lightly charred but not fully cooked.",
+                    "In a separate pan, fry onion, garlic and ginger until soft.",
+                    "Add remaining tikka paste and garam masala, cook for 1 minute.",
+                    "Add tomatoes and simmer for 10 minutes until thickened.",
+                    "Add chicken and cream, simmer for another 10 minutes until chicken is cooked through.",
+                    "Garnish with fresh coriander and serve with rice or naan."
+                ],
+                notes: "For extra flavor, add a splash of lemon juice and a pinch of kasoori methi (dried fenugreek leaves)."
             },
             {
                 id: 3,
@@ -394,34 +598,37 @@
                 description: "French beef stew braised in red wine.",
                 prepTime: "30 mins",
                 cookTime: "3 hours",
+                servings: 6,
+                difficulty: "Medium",
                 rating: 4.9,
                 tags: ["French", "Beef", "Stew"],
-                ingredients: ["Beef", "Red Wine", "Mushrooms", "Onions", "Bacon"],
-                instructions: ["Brown beef", "Sauté vegetables", "Add wine", "Slow cook"]
+                ingredients: [
+                    "1kg beef chuck, cut into chunks",
+                    "200g bacon lardons",
+                    "300g button mushrooms",
+                    "300g pearl onions",
+                    "2 carrots, sliced",
+                    "3 garlic cloves, minced",
+                    "750ml red wine (Burgundy preferred)",
+                    "2 tbsp tomato paste",
+                    "Beef stock as needed",
+                    "Bouquet garni (thyme, bay leaf, parsley)"
+                ],
+                instructions: [
+                    "Preheat oven to 160°C (325°F).",
+                    "Pat beef dry and season. Brown in batches in a Dutch oven, then set aside.",
+                    "In same pot, cook bacon until crisp. Remove, leaving fat.",
+                    "Sauté mushrooms, onions and carrots until lightly browned. Add garlic, cook 1 minute more.",
+                    "Return beef and bacon to pot. Add wine, tomato paste and bouquet garni. Add stock if needed to cover meat.",
+                    "Bring to simmer, cover and transfer to oven. Cook for 2.5-3 hours until beef is tender.",
+                    "Remove bouquet garni. Skim excess fat if needed. Season to taste before serving."
+                ],
+                notes: "This dish tastes even better the next day. Serve with crusty bread or mashed potatoes."
             }
         ];
 
-        // ===== DEEPSEEK AI BLOG GENERATION =====
-        async function generateBlogPost() {
-            const blogPosts = document.getElementById("blogPosts");
-            
-            // Show loading state
-            blogPosts.innerHTML = `
-                <div class="blog-post">
-                    <p><i class="fas fa-spinner fa-spin"></i> AI is cooking up your blog post...</p>
-                </div>
-            `;
-
-            // Predefined topics (customize these!)
-            const topics = [
-                "The History of Pasta: From Italy to the World",
-                "5 Must-Try Street Foods in Southeast Asia",
-                "Baking Science: How to Make Perfect Sourdough",
-                "Vegetarian Protein Sources for Home Cooks",
-                "The Art of Food Plating: Restaurant Secrets"
-            ];
-            const randomTopic = topics[Math.floor(Math.random() * topics.length)];
-
+        // ===== DEEPSEEK AI INTEGRATION =====
+        async function callDeepSeekAPI(prompt, systemMessage = "") {
             try {
                 const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
                     method: "POST",
@@ -434,17 +641,11 @@
                         messages: [
                             {
                                 role: "system",
-                                content: "You are a professional food blogger. Write engaging, informative posts with proper HTML formatting."
+                                content: systemMessage || "You are a professional chef and food writer. Provide detailed, accurate information with proper HTML formatting."
                             },
                             {
                                 role: "user",
-                                content: `Write a 600-word blog post about: ${randomTopic}. 
-                                          Include:
-                                          - An engaging introduction
-                                          - 3 subheadings with <h3> tags
-                                          - 1 featured recipe with ingredients list
-                                          - A conclusion with key takeaways
-                                          Format in clean HTML.`
+                                content: prompt
                             }
                         ],
                         temperature: 0.7,
@@ -452,39 +653,144 @@
                     })
                 });
 
-                if (!response.ok) throw new Error("API request failed");
-
+                if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
                 const data = await response.json();
-                const content = data.choices[0].message.content;
+                return data.choices[0].message.content;
+            } catch (error) {
+                console.error("API Error:", error);
+                throw error;
+            }
+        }
 
-                // Display the generated post
-                blogPosts.innerHTML = `
+        // ===== RECIPE GENERATION =====
+        async function generateCustomRecipe() {
+            const prompt = document.getElementById("recipePrompt").value.trim();
+            if (!prompt) {
+                alert("Please enter a description for the recipe you want to generate");
+                return;
+            }
+
+            const generatedRecipes = document.getElementById("generatedRecipes");
+            generatedRecipes.innerHTML = `
+                <div class="blog-post">
+                    <p><span class="loading-spinner"></span> AI is cooking up your recipe...</p>
+                </div>
+            `;
+
+            try {
+                const recipePrompt = `Create a detailed recipe based on: ${prompt}. 
+                    Include:
+                    - A creative recipe title
+                    - Brief introduction (50 words)
+                    - Prep time and cook time
+                    - Number of servings
+                    - Detailed ingredients list with quantities
+                    - Step-by-step instructions
+                    - Any special notes or tips
+                    Format in clean HTML with <h3> tags for sections.`;
+                
+                const recipeContent = await callDeepSeekAPI(recipePrompt, "You are a professional chef. Create detailed, practical recipes with clear instructions.");
+                
+                generatedRecipes.innerHTML = `
                     <div class="blog-post">
                         <div class="blog-post-meta">
-                            ${new Date().toLocaleDateString()} • Topic: ${randomTopic}
+                            ${new Date().toLocaleDateString()} • AI-Generated Recipe
                         </div>
-                        ${content}
-                        <button onclick="location.reload()" class="ai-generate-btn" style="margin-top: 20px;">
-                            <i class="fas fa-sync-alt"></i> Generate Another
+                        ${recipeContent}
+                        <button onclick="generateCustomRecipe()" class="ai-generate-btn" style="margin-top: 20px;">
+                            <i class="fas fa-magic"></i> Generate Another
                         </button>
                     </div>
                 `;
+            } catch (error) {
+                generatedRecipes.innerHTML = `
+                    <div class="blog-post" style="color: #ff6b6b;">
+                        <h3>Recipe Generation Failed</h3>
+                        <p>We couldn't generate the recipe. Error: ${error.message}</p>
+                        <button onclick="generateCustomRecipe()" class="ai-generate-btn">
+                            <i class="fas fa-redo"></i> Try Again
+                        </button>
+                    </div>
+                `;
+            }
+        }
 
+        function generateRecipe(type) {
+            const prompts = {
+                breakfast: "Create a healthy breakfast recipe using seasonal ingredients",
+                lunch: "Make a quick and easy lunch recipe that can be prepared in under 30 minutes",
+                dinner: "Design an impressive dinner recipe suitable for entertaining guests",
+                dessert: "Invent a delicious dessert recipe with a unique twist",
+                vegan: "Develop a flavorful vegan recipe that even meat-eaters would enjoy"
+            };
+            
+            document.getElementById("recipePrompt").value = prompts[type];
+        }
+
+        // ===== BLOG POST GENERATION =====
+        async function generateBlogPost() {
+            const prompt = document.getElementById("blogPrompt").value.trim();
+            if (!prompt) {
+                alert("Please enter a topic or direction for your blog post");
+                return;
+            }
+
+            const blogPosts = document.getElementById("blogPosts");
+            blogPosts.innerHTML = `
+                <div class="blog-post">
+                    <p><span class="loading-spinner"></span> AI is writing your blog post...</p>
+                </div>
+            `;
+
+            try {
+                const blogPrompt = `Write a 600-800 word food blog post about: ${prompt}. 
+                    Include:
+                    - Engaging introduction
+                    - 3-4 subheadings with <h3> tags
+                    - Detailed, informative content
+                    - 1 featured recipe with ingredients and instructions
+                    - Conclusion with key takeaways
+                    Format in clean HTML.`;
+                
+                const postContent = await callDeepSeekAPI(blogPrompt);
+                
+                blogPosts.innerHTML = `
+                    <div class="blog-post">
+                        <div class="blog-post-meta">
+                            ${new Date().toLocaleDateString()} • AI-Generated Post
+                        </div>
+                        ${postContent}
+                        <button onclick="generateBlogPost()" class="ai-generate-btn" style="margin-top: 20px;">
+                            <i class="fas fa-magic"></i> Generate Another
+                        </button>
+                    </div>
+                `;
             } catch (error) {
                 blogPosts.innerHTML = `
                     <div class="blog-post" style="color: #ff6b6b;">
-                        <h3>Oops! Kitchen Disaster</h3>
+                        <h3>Blog Post Generation Failed</h3>
                         <p>We couldn't generate the post. Error: ${error.message}</p>
                         <button onclick="generateBlogPost()" class="ai-generate-btn">
                             <i class="fas fa-redo"></i> Try Again
                         </button>
                     </div>
                 `;
-                console.error("API Error:", error);
             }
         }
 
-        // ===== RECIPE LOADING =====
+        function setBlogPrompt(type) {
+            const prompts = {
+                trends: "Write about emerging food trends for the upcoming season",
+                techniques: "Create a guide to essential cooking techniques every home chef should master",
+                culture: "Explore the history and cultural significance of a specific traditional dish",
+                health: "Discuss the health benefits of a particular ingredient or diet style",
+                restaurants: "Write a guide to the best restaurants in a major city for a specific cuisine"
+            };
+            
+            document.getElementById("blogPrompt").value = prompts[type];
+        }
+
+        // ===== RECIPE DISPLAY =====
         function loadRecipes() {
             const recipeGrid = document.getElementById("recipeGrid");
             recipes.forEach(recipe => {
@@ -495,7 +801,7 @@
                     <div class="recipe-content">
                         <h3>${recipe.title}</h3>
                         <div class="recipe-meta">
-                            <span><i class="fas fa-clock"></i> ${recipe.prepTime}</span>
+                            <span><i class="fas fa-clock"></i> ${recipe.prepTime} + ${recipe.cookTime}</span>
                             <span class="recipe-rating">
                                 <i class="fas fa-star"></i> ${recipe.rating}
                             </span>
@@ -504,10 +810,64 @@
                         <div class="recipe-tags">
                             ${recipe.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}
                         </div>
+                        <button onclick="showRecipeDetail(${recipe.id})" class="ai-generate-btn" style="margin-top: 15px; width: 100%;">
+                            <i class="fas fa-book-open"></i> View Recipe
+                        </button>
                     </div>
                 `;
                 recipeGrid.appendChild(card);
             });
+        }
+
+        function showRecipeDetail(id) {
+            const recipe = recipes.find(r => r.id === id);
+            if (!recipe) return;
+            
+            const modal = document.getElementById("recipeModal");
+            const detail = document.getElementById("recipeDetail");
+            
+            detail.innerHTML = `
+                <div>
+                    <img src="${recipe.image}" alt="${recipe.title}">
+                </div>
+                <div>
+                    <h2>${recipe.title}</h2>
+                    <p>${recipe.description}</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0;">
+                        <div>
+                            <h4><i class="fas fa-clock"></i> Prep Time</h4>
+                            <p>${recipe.prepTime}</p>
+                        </div>
+                        <div>
+                            <h4><i class="fas fa-fire"></i> Cook Time</h4>
+                            <p>${recipe.cookTime}</p>
+                        </div>
+                        <div>
+                            <h4><i class="fas fa-utensils"></i> Servings</h4>
+                            <p>${recipe.servings}</p>
+                        </div>
+                    </div>
+                    
+                    <h3>Ingredients</h3>
+                    <ul>
+                        ${recipe.ingredients.map(ing => `<li>${ing}</li>`).join("")}
+                    </ul>
+                    
+                    <h3>Instructions</h3>
+                    <ol>
+                        ${recipe.instructions.map(step => `<li>${step}</li>`).join("")}
+                    </ol>
+                    
+                    ${recipe.notes ? `<h3>Chef's Notes</h3><p>${recipe.notes}</p>` : ''}
+                </div>
+            `;
+            
+            modal.classList.add("active");
+        }
+
+        function closeModal() {
+            document.getElementById("recipeModal").classList.remove("active");
         }
 
         // ===== DARK MODE TOGGLE =====
@@ -540,6 +900,11 @@
             if (window.location.hostname.includes("github.io")) {
                 console.warn("Note: API keys are visible on GitHub Pages. For production, use a backend service.");
             }
+            
+            // Close modal when clicking outside
+            document.getElementById("recipeModal").addEventListener("click", function(e) {
+                if (e.target === this) closeModal();
+            });
         });
     </script>
 </body>
